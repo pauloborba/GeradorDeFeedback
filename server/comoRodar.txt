@@ -1,0 +1,15 @@
+Primeiramente, instale as dependências com
+
+> npm install
+
+Depois disso, crie um arquivo chamado ".env" e copie as chaves contidas no arquivo ".env.example" com os valores para cada chave apropriados (URL do banco, nome do db, e jwt login secret).
+
+Para rodar o servidor, simplesmente digite no cmd, enquanto na pasta server o seguinte comando:
+
+> npm run watch
+
+Pronto, como você rodou com o comando watch, toda modificação feita no código irá reiniciar o servidor automaticamente.
+
+Caso não funcione o procedimento acima e você está no windows, reinstale o node marcando a opção de baixar as ferramentas essenciais ou rode o seguinte comando:
+
+> npm install --global windows-build-tools

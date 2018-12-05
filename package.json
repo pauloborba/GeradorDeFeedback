@@ -1,0 +1,19 @@
+{
+  "name": "genip",
+  "version": "1.0.0",
+  "description": "projeto exemplo da disciplina de ESS da graduação em Ciência da Computação do CIn-UFPE",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd server && jasmine --config=./spec/support/jasmine.json "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasbarross/genip.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucasbarross/genip/issues"
+  },
+  "homepage": "https://github.com/lucasbarross/genip#readme"
+}
