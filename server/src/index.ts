@@ -10,9 +10,8 @@ import TheHuxleyService from "./services/theHuxley";
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
-console.log(mongoUrl)
-MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then((mongo: MongoClient) => {
-  console.log("oi")
+
+module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then((mongo: MongoClient) => {
     const db: Db = mongo.db(MONGODB_NAME);
     /**
      * Primary app routes.
@@ -28,7 +27,7 @@ MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then((mongo: MongoClien
     
     passportConfig.setupPassport(userRepository, authService);
     userRoutes(authService, userRepository, app);
-    app.listen(app.get("port"), () => {
+    return app.listen(app.get("port"), () => {
       console.log(
         "  App is running at http://localhost:%d in %s mode",
         app.get("port"),
