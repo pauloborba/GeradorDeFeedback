@@ -5,7 +5,7 @@ import UserRepository from "../repositories/userRepository";
 export default function (authService: AuthService, userRepository: UserRepository, app: Express) {
     
     app.get("/", function(req: Request, res: Response) {
-        res.sendFile("index.html");
+        res.json({ status: 'ok'});
     });
 
     app.post("/api/login",  (req, res, next) => authService.postLogin(req, res, next));
