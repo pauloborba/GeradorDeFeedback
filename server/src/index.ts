@@ -11,8 +11,20 @@ import TheHuxleyService from "./services/theHuxley";
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 
-module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then((mongo: MongoClient) => {
+module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(async (mongo: MongoClient) => {
     const db: Db = mongo.db(MONGODB_NAME);
+    
+    if (process.env.NODE_ENV == 'test') { // Só é executado em testes pra limpar o banco de dados
+      try {
+        await db.dropCollection('users')
+        await db.dropCollection('students')
+        await db.dropCollection('lists')
+        await db.dropCollection('submissions')
+      } catch (e) {
+        // Para poder apagar collections que não foram cclearriadas ainda
+      }
+    }
+
     /**
      * Primary app routes.
      */
@@ -35,4 +47,5 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then((
       );
       console.log("  Press CTRL-C to stop\n");
     });
+    
 }).catch(err => console.log(err));
