@@ -10,11 +10,13 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginService } from './services/login.service';
 import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './pages/home/home.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -23,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent, pathMatch: 'full'},
+      {path: '', component: HomeComponent, canActivate: [AuthGuard] }
     ])
   ],
   providers: [LoginService, UserService, AuthGuard],
