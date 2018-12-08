@@ -71,7 +71,6 @@ export default class AuthService {
 
         const errors = await req.getValidationResult();
         const errorsArray = errors.array().map((e) => e.msg);
-
         if (!errors.isEmpty()) {
             return res.status(422).json({ err: errorsArray });
         }
@@ -79,6 +78,8 @@ export default class AuthService {
         const user: IUser = {
             username: req.body.username,
             password: req.body.password,
+            status: "Confirmado",
+            name: req.body.name
         };
 
         try {
