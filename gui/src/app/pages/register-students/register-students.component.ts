@@ -43,13 +43,20 @@ export class RegisterStudentsComponent implements OnInit {
   handleFileRead(file) {
     const fileBinary = file.target.result;
     const wb = xlsx.read(fileBinary, { type: 'binary'});
-    this.studentsReadFromFile = xlsx.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]).map((val) => {
+    this.studentsReadFromFile = this.excelToJson(wb);
+  }
+
+  excelToJson(wb): any[] {
+    return xlsx.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]).map((val) => {
       delete val['__rowNum__'];
       return val;
     });
   }
 
   handleFile(event) {
-    this.fileReader.readAsBinaryString(event.target.files[0]);
+    const files = event.target.files;
+    if (files) {
+      this.fileReader.readAsBinaryString(files[0]);
+    }
   }
 }
