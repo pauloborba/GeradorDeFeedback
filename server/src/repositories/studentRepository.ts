@@ -15,7 +15,7 @@ export default class StudentRepository {
     }
 
     findOne(studentId: string): Promise<Student> {
-        return Promise.resolve(new Student());
+        return Promise.resolve(new Student({ theHuxleyName: "", login: "", submissions: []}));
     }
     
     insertOne(student: IStudent): Promise<any> {
