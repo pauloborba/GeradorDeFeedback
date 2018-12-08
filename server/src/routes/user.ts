@@ -46,7 +46,16 @@ export default function (authService: AuthService, userRepository: UserRepositor
         (req, res, next) => authService.checkTokenMiddleware(req, res, next),
         async (req: Request, res: Response) => {
             try {
+
+                if (await userRepository.isAlreadyRegistered(req.body.username)) {
+                    return res.status(400).json({
+                        status: 'Failure',
+                        message: `There is already a student registered with the login ${req.body.username}`
+                    })
+                }
+
                 const currentUser = <User> await userRepository.findOne({ _id: req.authInfo._id })
+                
                 const newUser: IUser = {
                     username: req.body.username,
                     password: '',

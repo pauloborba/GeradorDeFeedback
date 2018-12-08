@@ -44,7 +44,9 @@ export class RegisterComponent implements OnInit {
         this.message = res.message;
         await this.getAll()
     } catch (err) {
-        console.log(err)
+        if (err.status == 400) {
+            this.message = err.error.message;
+        }
     }
   }
 

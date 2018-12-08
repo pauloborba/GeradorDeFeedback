@@ -86,10 +86,11 @@ export default class UserRepository {
     }
   }
 
-  isAlreadyRegistered(login: string) {
-    return false
+  isAlreadyRegistered(login: string): Promise<boolean> {
+    return this.mongodb.collection("users").findOne({ username: login })
+      .then(foundUser => foundUser !== null )
   }
-  
+
   async getAll() {
     return this.mongodb.collection("users").find({}).toArray();
   }

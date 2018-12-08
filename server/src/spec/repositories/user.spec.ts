@@ -53,9 +53,9 @@ describe("A classe UserRepository", () => {
         name: 'Rafael', 
         status: 'Confirmado'}, true);
       
-      await expect(userRepository.isAlreadyRegistered('rma7')).toBe(true)
+      await expect(await userRepository.isAlreadyRegistered('rma7')).toBe(true)
 
-      await expect(userRepository.isAlreadyRegistered('aaa')).toBe(false)
+      await expect(await userRepository.isAlreadyRegistered('aaa')).toBe(false)
 
       
 
