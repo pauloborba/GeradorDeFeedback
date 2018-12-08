@@ -16,3 +16,9 @@ And that i am at the "Register students" page
 And "Joao" is not registered in The Huxley's group
 When I try to upload a "XLS" file with columns "TheHuxleyName" and "LoginCin" and an entry of "Joao" and "j" for those columns respectively
 Then I can see a error message
+
+Scenario: new students with empty login
+Given that i am logged as a Admin user, "admin", with password "123456"
+And that i am at the "Register students" page
+When I try to upload a "XLS" file with columns "TheHuxleyName" and "LoginCin" and an entry of "Rafael Mota Alves" and "" for those columns respectively
+Then I can see a error message
