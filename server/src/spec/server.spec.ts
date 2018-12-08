@@ -1,5 +1,6 @@
 import axios from "axios";
 import app from "../index";
+import { IStudent } from "collections";
 
 var base_url = "http://localhost:3000";
 
@@ -7,6 +8,30 @@ describe("O servidor", () => {
 
   let server: any = null;
   let token: any = null;
+  
+  async function registerStudents(students: IStudent[]){
+    return axios.post(`${base_url}/api/students`, { students }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+  };
+
+  async function checkNotRegisterStudent(student: IStudent, code: number){
+    try {
+      const resPost = await registerStudents([student]);
+      
+    } catch (err) {
+      // console.log(err.message);
+      expect(err.response.status).toBe(code);
+    }
+
+    const res = await axios.get(`${base_url}/api/students`, { headers: {
+      Authorization: `Bearer ${token}`
+    }});
+
+    expect(res.data.students).not.toContain(student);
+  }
 
   beforeAll(async () => {
     server = await app
@@ -40,11 +65,7 @@ describe("O servidor", () => {
 
   it('deveria registrar e recuperar estudantes', async () => {
     try {
-      const resPost = await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam"}]}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      const resPost = await registerStudents([{theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam", submissions: []}]);
       
       await expect(resPost.data).toEqual({
         status: 'ok',
@@ -62,62 +83,29 @@ describe("O servidor", () => {
 
   it('deveria não registrar estudantes não participantes do grupo do the huxley', async () => {
     try {
-      const resPost = (await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "Joao", login: "j"}]}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })).data;
-      
+      await checkNotRegisterStudent({theHuxleyName: "Joao", login: "j", submissions: []}, 404);
     } catch (err) {
       // console.log(err.message);
-      expect(err.response.status).toBe(422);
+      expect(err).toBe(null);
     }
-
-    const res = await axios.get(`${base_url}/api/students`, { headers: {
-      Authorization: `Bearer ${token}`
-    }});
-
-    expect(res.data.students).not.toContain({theHuxleyName: "Joao", login: "j"});
   })
   
   it('deveria não registrar estudantes com login em branco', async () => {
     try {
-      const resPost = (await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "Rafael Mota Alves", login: ""}]}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })).data;
-      
+      await checkNotRegisterStudent({theHuxleyName: "Rafael Mota Alves", login: "", submissions: []}, 422);
     } catch (err) {
       // console.log(err.message);
-      expect(err.response.status).toBe(422);
+      expect(err).toBe(null);
     }
-
-    const res = await axios.get(`${base_url}/api/students`, { headers: {
-      Authorization: `Bearer ${token}`
-    }});
-
-    expect(res.data.students).not.toContain({theHuxleyName: "Rafael Mota Alves", login: ""});
   })
   
   it('deveria não registrar estudantes com nome em branco', async () => {
     try {
-      const resPost = (await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "", login: "rma7"}]}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })).data;
-      
+      await checkNotRegisterStudent({theHuxleyName: "", login: "rma7", submissions: []}, 422);
     } catch (err) {
       // console.log(err.message);
-      expect(err.response.status).toBe(422);
+      expect(err).toBe(null);
     }
-
-    const res = await axios.get(`${base_url}/api/students`, { headers: {
-      Authorization: `Bearer ${token}`
-    }});
-
-    expect(res.data.students).not.toContain({theHuxleyName: "", login: "rma7"});
   })
 
 })
