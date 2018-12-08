@@ -7,6 +7,8 @@ import * as passportConfig from "./config/passport";
 import UserRepository from "./repositories/userRepository";
 import AuthService from "./services/auth";
 import TheHuxleyService from "./services/theHuxley";
+import MailService from "./services/mail";
+import user from "./routes/user";
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
@@ -32,13 +34,21 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
     // Repositories
     const userRepository: UserRepository = new UserRepository(db);
     
+    if (! (await userRepository.findOne({ username: 'admin' }))) {
+      await userRepository.insertOne({ 
+        username: 'admin', 
+        password: '12345', 
+        isAdmin: true, 
+        status: 'Confirmado', 
+        name: 'Adminstrador'}, true)
+    }
     // Services
     const authService: AuthService = new AuthService(userRepository);
     const theHuxleyService: TheHuxleyService = new TheHuxleyService();
-  
+    const mailService: MailService = new MailService();
     
     passportConfig.setupPassport(userRepository, authService);
-    userRoutes(authService, userRepository, app);
+    userRoutes(authService, userRepository, mailService, app);
     return app.listen(app.get("port"), () => {
       console.log(
         "  App is running at http://localhost:%d in %s mode",
