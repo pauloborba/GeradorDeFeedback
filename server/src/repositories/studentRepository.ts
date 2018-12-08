@@ -1,8 +1,14 @@
 import Student from "../models/Student";
 import { IStudent } from "collections";
 import Submission from "../models/Submission";
+import { Db } from "mongodb";
 
 export default class StudentRepository {
+    mongodb: Db;
+
+    constructor (mongodb: Db) {
+      this.mongodb = mongodb;
+    }
 
     findAll(criteria: any): Promise<Array<Student>> {
         return this.mongodb.collection("students").find({}).toArray();
