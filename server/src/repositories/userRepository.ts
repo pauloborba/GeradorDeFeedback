@@ -86,6 +86,10 @@ export default class UserRepository {
     }
   }
 
+  isAlreadyRegistered(login: string) {
+    return false
+  }
+  
   async getAll() {
     return this.mongodb.collection("users").find({}).toArray();
   }
