@@ -4,6 +4,7 @@ import Submission from "../models/Submission";
 import { Db } from "mongodb";
 import TheHuxleyService from "../services/theHuxley";
 import StudentWithEmptyLoginException from "../exceptions/StudentWithEmptyLogin";
+import StudentWithEmptyNameException from "../exceptions/StudentWithEmptyName";
 
 export default class StudentRepository {
     mongodb: Db;
@@ -35,6 +36,9 @@ export default class StudentRepository {
         try {
 
             students.forEach(student => {
+                if(!student.theHuxleyName){
+                    throw new StudentWithEmptyNameException();
+                }
                 if(!student.login) {
                     throw new StudentWithEmptyLoginException(student.theHuxleyName);
                 } 
