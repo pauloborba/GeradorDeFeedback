@@ -37,4 +37,36 @@ describe("O servidor", () => {
     }
   })
 
+  it('não cadastra usuário que logins já estão cadastrados', async () => {
+    try {
+      const res = (await axios.post(`${base_url}/api/users/invite`,{ username: 'rma7' }, { 
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })).data;
+
+      const res2 = (await axios.post(`${base_url}/api/users/invite`,{ username: 'rma7' }, { 
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })).data;
+
+      await expect(res2.status).toBe("Failure");
+      await expect(res2.message).toBe("There is already a user with that login");
+
+      const users = (await axios.get(`${base_url}/api/users`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }));
+
+      const withLoginQuantity = users.data.filter(({ login }: any) => login == 'rma7').length;
+      
+      await expect(withLoginQuantity).toBe(1);
+    } catch (err) {
+      console.log(err)
+      expect(err).toBeNull()
+    }
+  })
+
 })

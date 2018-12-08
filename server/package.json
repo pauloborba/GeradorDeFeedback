@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Servidor do Genip",
   "scripts": {
-    "test": "export NODE_ENV='test' && tsc && jasmine --config=./src/spsec/support/jasmine.json",
+    "test": "export NODE_ENV='test' && tsc && jasmine --config=./src/spec/support/jasmine.json",
     "test-run": "export NODE_ENV='test' && tsc && nodemon dist/index.js",
     "start": "npm run serve",
     "build": "npm run build-ts",
