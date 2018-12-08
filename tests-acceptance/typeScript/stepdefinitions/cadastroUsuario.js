@@ -12,7 +12,7 @@ const cucumber_1 = require("cucumber");
 const protractor_1 = require("protractor");
 let chai = require('chai').use(require('chai-as-promised'));
 let expect = chai.expect;
-let pAND = ((p, q) => p.then(a => q.then(b => a && b)));
+let pAND = (p, q) => p.then(a => q.then(b => a && b));
 let sameName = (elem, name) => elem.$$('span[name="name"]').getText().then(text => text == name);
 let sameLogin = (elem, login) => elem.$$('span[name="login"]').getText().then(text => text == login);
 cucumber_1.defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {

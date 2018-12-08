@@ -11,7 +11,7 @@ import { LoginService } from './services/login.service';
 import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './pages/home/home.component'
-import { RegisterComponent } from './pages/registro/registro.component
+import { RegisterComponent } from './pages/registro/registro.component'
 
 @NgModule({
   declarations: [
@@ -29,7 +29,6 @@ import { RegisterComponent } from './pages/registro/registro.component
       {path: 'login', component: LoginComponent, pathMatch: 'full'},
       {path: '', component: HomeComponent, canActivate:[AuthGuard]},
       {path: 'register', component: RegisterComponent, canActivate:[AuthGuard]},
-      {path: '', component: HomeComponent, canActivate: [AuthGuard] }
     ])
   ],
   providers: [LoginService, UserService, AuthGuard],

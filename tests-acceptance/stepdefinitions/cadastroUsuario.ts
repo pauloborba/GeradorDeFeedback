@@ -1,14 +1,14 @@
 
 import { defineSupportCode } from 'cucumber';
 import { browser, $, element, ElementArrayFinder, by } from 'protractor';
-import { async } from 'q';
 let chai = require('chai').use(require('chai-as-promised'));
 let expect = chai.expect;
 
-let pAND = ((p,q) => p.then(a => q.then(b => a && b)))
+let pAND = (p,q) => p.then(a => q.then(b => a && b));
 
-let sameName = (elem, name) => elem.$$('span[name="name"]').getText().then(text => text == name)
-let sameLogin = (elem, login) => elem.$$('span[name="login"]').getText().then(text => text == login)
+let sameName = (elem, name) => elem.$$('span[name="name"]').getText().then(text => text == name);
+let sameLogin = (elem, login) => elem.$$('span[name="login"]').getText().then(text => text == login);
+
 defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
 
     setDefaultTimeout(60 * 1000);
@@ -44,7 +44,7 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
         await allUsers;
 
         var filteredUsers = allUsers.filter(
-            elem => pAND(sameLogin(elem, login), sameName(elem, name);
+            elem => pAND(sameLogin(elem, login), sameName(elem, name))
         );
         await filteredUsers;
         await filteredUsers.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(0));
