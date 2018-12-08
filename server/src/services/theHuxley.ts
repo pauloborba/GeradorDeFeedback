@@ -107,13 +107,13 @@ export default class TheHuxleyService {
     getUserInfoByName = async (name: string) => {
         try {
             if (!this.authorization) await this.login();
-            const users = await axios.get('https://www.thehuxley.com/api/v1/groups/194/users?max=150');
+            const users = await axios.get('https://www.thehuxley.com/api/v1/groups/194/users?max=300');
             const user = users.data.find((user: any) => user.name === name);
             // console.log(users);
-            if (!user) throw new Error('No student found with this name.');
+            if (!user) throw new Error(`No student found with name ${name}`);
             return Promise.resolve(user);
         } catch (err) {
-            console.log(err.message)
+            // console.log(err.message)
             return Promise.reject(err);
         }
     }
