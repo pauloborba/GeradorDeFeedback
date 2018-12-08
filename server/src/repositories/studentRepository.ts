@@ -4,8 +4,8 @@ import Submission from "../models/Submission";
 
 export default class StudentRepository {
 
-    findAll(): Promise<Array<Student>> {
-        return Promise.resolve([new Student()]);
+    findAll(criteria: any): Promise<Array<Student>> {
+        return this.mongodb.collection("students").find({}).toArray();
     }
 
     findOne(studentId: string): Promise<Student> {
