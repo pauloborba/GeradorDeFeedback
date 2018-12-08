@@ -47,5 +47,6 @@ defineSupportCode(function ({ Given, When, Then }) {
         await browser.wait(ExpectedConditions.alertIsPresent(), 5000);
         const alertDialog = await browser.switchTo().alert();
         await expect(alertDialog.getText()).to.eventually.include("Error");
+        await alertDialog.accept();
     })
 })

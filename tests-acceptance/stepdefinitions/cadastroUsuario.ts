@@ -29,7 +29,9 @@ defineSupportCode(function ({ Given, When, Then }) {
         if (page == 'Register Teaching Assistant') uri = 'register'   
         if (page == 'Register students') uri = 'students/new'
         await browser.get(`http://localhost:4200/${uri}`)
-        await expect(browser.getTitle()).to.eventually.equal('GeradorDeFeedback');    
+        await expect(browser.getTitle()).to.eventually.equal('GeradorDeFeedback'); 
+        
+        await browser.wait(() => $("#uploadButton").isPresent());
     })
 
     Given(/that i cant see a teaching assistant with name "([^\"]*)" and login "([^\"]*)"/, async (name, login) => {
