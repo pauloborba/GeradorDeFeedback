@@ -13,7 +13,7 @@ import StudentRepository from "./repositories/studentRepository";
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 
-module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(async (mongo: MongoClient) => {
+export default MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(async (mongo: MongoClient) => {
     const db: Db = mongo.db(MONGODB_NAME);
     
     if (process.env.NODE_ENV == 'test') { // Só é executado em testes pra limpar o banco de dados
