@@ -3,6 +3,7 @@ import AuthService from "../services/auth";
 import StudentRepository from "../repositories/studentRepository";
 import TheHuxleyService from "../services/theHuxley";
 import { IStudent } from "collections";
+import StudentNotInTheHuxley from "../exceptions/StudentNotInTheHuxley";
 
 export default function (authService: AuthService, studentRepository: StudentRepository, theHuxleyService: TheHuxleyService, app: Express) {
     
@@ -14,7 +15,7 @@ export default function (authService: AuthService, studentRepository: StudentRep
                 status: "ok",
                 students: all
             });
-            
+
         } catch (err) {
             res.status(500).json({
                 status: "error",
@@ -25,7 +26,7 @@ export default function (authService: AuthService, studentRepository: StudentRep
     
     app.post("/api/students",  (req, res, next) => authService.checkTokenMiddleware(req, res, next), async(req: Request, res: Response) => {
         try {
-            console.log(req.body.students);
+            // console.log(req.body.students);
             await studentRepository.deleteMany({});
             await studentRepository.insertMany(req.body.students);
             res.status(200).json({
@@ -33,7 +34,11 @@ export default function (authService: AuthService, studentRepository: StudentRep
                 message: "Students were registered successfully"
             });
         } catch (err) {
-            res.status(500).json({
+            let status = 500;
+
+            if(err instanceof StudentNotInTheHuxley) status = 422;
+
+            res.status(status).json({
                 status: "error",
                 message: err.message
             })
