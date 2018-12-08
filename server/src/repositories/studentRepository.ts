@@ -16,6 +16,9 @@ export default class StudentRepository {
         return Promise.resolve();
     }
 
+    insertMany(students: IStudent[]) : Promise<any> {
+        return this.mongodb.collection("students").insertMany(students);
+    }
     addSubmission(student: Student, submission: Submission): Promise<any> {
         return Promise.resolve();
     }
