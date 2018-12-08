@@ -79,5 +79,25 @@ describe("O servidor", () => {
 
     expect(res.data.students).not.toContain({theHuxleyName: "Joao", login: "j"});
   })
+  
+  it('deveria não registrar estudantes com login em branco', async () => {
+    try {
+      const resPost = (await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "Rafael Mota Alves", login: ""}]}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data;
+      
+    } catch (err) {
+      // console.log(err.message);
+      expect(err.response.status).toBe(422);
+    }
+
+    const res = await axios.get(`${base_url}/api/students`, { headers: {
+      Authorization: `Bearer ${token}`
+    }});
+
+    expect(res.data.students).not.toContain({theHuxleyName: "Rafael Mota Alves", login: ""});
+  })
 
 })
