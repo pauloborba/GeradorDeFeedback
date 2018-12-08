@@ -31,14 +31,14 @@ export default MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(asy
      * Primary app routes.
      */
 
-    // Repositories
+    // Repositories and services
     const userRepository: UserRepository = new UserRepository(db);
-    const studentRepository: StudentRepository = new StudentRepository(db);
-    
-    // Services
     const authService: AuthService = new AuthService(userRepository);
     const theHuxleyService: TheHuxleyService = new TheHuxleyService();
+    const studentRepository: StudentRepository = new StudentRepository(db, theHuxleyService);
+    
     await theHuxleyService.login();
+    
     
     passportConfig.setupPassport(userRepository, authService);
     userRoutes(authService, userRepository, app);

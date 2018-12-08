@@ -2,12 +2,15 @@ import Student from "../models/Student";
 import { IStudent } from "collections";
 import Submission from "../models/Submission";
 import { Db } from "mongodb";
+import TheHuxleyService from "../services/theHuxley";
 
 export default class StudentRepository {
     mongodb: Db;
+    theHuxleyService: TheHuxleyService;
 
-    constructor (mongodb: Db) {
+    constructor (mongodb: Db, theHuxleyService: TheHuxleyService) {
       this.mongodb = mongodb;
+      this.theHuxleyService = theHuxleyService;
     }
 
     findAll(criteria: any): Promise<Array<Student>> {

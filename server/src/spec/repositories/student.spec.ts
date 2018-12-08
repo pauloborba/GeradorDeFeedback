@@ -2,6 +2,7 @@ import StudentRepository from "../../repositories/studentRepository";
 import { MongoClient, Db } from "mongodb";
 import { MONGODB_URI } from "../../util/secrets";
 import { MONGODB_NAME } from "../../util/secrets";
+import TheHuxleyService from "../../services/theHuxley";
 
 describe("A classe studentRepository", () => {
     let studentRepository: StudentRepository;
@@ -11,11 +12,9 @@ describe("A classe studentRepository", () => {
       let mongo: MongoClient = await MongoClient.connect(MONGODB_URI, { useNewUrlParser: true });
       db = mongo.db(MONGODB_NAME);
       await db.collection("students").drop();  
-      studentRepository = new StudentRepository(db);  
-    });
-  
-    afterEach(async () => {
-      await db.collection("students").drop();
+      const theHuxleyService = new TheHuxleyService();
+      theHuxleyService.login();
+      studentRepository = new StudentRepository(db, theHuxleyService);  
     });
     
     it("deve registrar e resgatar estudantes", async () => {
