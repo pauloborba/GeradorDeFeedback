@@ -1,0 +1,6 @@
+<input (change)="handleFile($event)" type="file" class="form-control">
+<button id="uploadButton" type="button" class="btn btn-primary" (click)="registerStudents()">Enviar</button>
+
+<div>
+  <div name="student" *ngFor="let student of students">{{student.theHuxleyName}} {{student.login}}</div>
+</div>

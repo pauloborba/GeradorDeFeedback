@@ -3,15 +3,17 @@ import { MONGODB_URI, MONGODB_NAME } from "./util/secrets";
 import app from "./app";
 
 import userRoutes from "./routes/user";
+import studentsRoutes from "./routes/students";
 import * as passportConfig from "./config/passport";
 import UserRepository from "./repositories/userRepository";
 import AuthService from "./services/auth";
 import TheHuxleyService from "./services/theHuxley";
+import StudentRepository from "./repositories/studentRepository";
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 
-module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(async (mongo: MongoClient) => {
+export default MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(async (mongo: MongoClient) => {
     const db: Db = mongo.db(MONGODB_NAME);
     
     if (process.env.NODE_ENV == 'test') { // Só é executado em testes pra limpar o banco de dados
@@ -31,14 +33,17 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
 
     // Repositories
     const userRepository: UserRepository = new UserRepository(db);
+    const studentRepository: StudentRepository = new StudentRepository(db);
     
     // Services
     const authService: AuthService = new AuthService(userRepository);
     const theHuxleyService: TheHuxleyService = new TheHuxleyService();
-  
+    await theHuxleyService.login();
     
     passportConfig.setupPassport(userRepository, authService);
     userRoutes(authService, userRepository, app);
+    studentsRoutes(authService, studentRepository, theHuxleyService, app);
+    
     return app.listen(app.get("port"), () => {
       console.log(
         "  App is running at http://localhost:%d in %s mode",
