@@ -3,7 +3,7 @@ import AuthService from "../services/auth";
 import StudentRepository from "../repositories/studentRepository";
 import TheHuxleyService from "../services/theHuxley";
 import { IStudent } from "collections";
-import StudentNotInTheHuxley from "../exceptions/StudentNotInTheHuxley";
+import StudentNotInTheHuxleyException from "../exceptions/StudentNotInTheHuxley";
 
 export default function (authService: AuthService, studentRepository: StudentRepository, theHuxleyService: TheHuxleyService, app: Express) {
     
@@ -36,7 +36,7 @@ export default function (authService: AuthService, studentRepository: StudentRep
         } catch (err) {
             let status = 500;
 
-            if(err instanceof StudentNotInTheHuxley) status = 422;
+            if(err instanceof StudentNotInTheHuxleyException) status = 422;
 
             res.status(status).json({
                 status: "error",
