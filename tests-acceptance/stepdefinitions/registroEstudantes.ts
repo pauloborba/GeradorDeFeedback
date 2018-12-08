@@ -11,7 +11,7 @@ let expect = chai.expect;
 defineSupportCode(function ({ Given, When, Then }) {
     Given(/"([^\"]*)" is registered in The Huxley\'s group/, async (name) => {
         const res = await axios.get(`http://localhost:3000/api/student?name=${name}`);
-        expect(res.data.status).toEqual("ok");
+        expect(res.data.status).to.equal("ok");
     });
     
     Given(/"([^\"]*)" is not registered in The Huxley\'s group/, async (name) => {
@@ -35,8 +35,9 @@ defineSupportCode(function ({ Given, When, Then }) {
         await element(by.css('input[type="file"]')).sendKeys(absolutePath);    
         await element(by.id('uploadButton')).click();
     });
-
+    
     Then(/I can see "([^\"]*)" with login "([^\"]*)" in the registered students list/, async (name: string, login: string) => {
+        await browser.wait(() => element(by.name("student")).isPresent());
         const allStudents = element.all(by.name("student"));
         let text = await allStudents.get(0).getText();
         await expect(Promise.resolve(text.indexOf(name))).to.not.eventually.equal(-1);
