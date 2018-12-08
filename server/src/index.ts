@@ -49,6 +49,7 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
     
     passportConfig.setupPassport(userRepository, authService);
     userRoutes(authService, userRepository, mailService, app);
+  
     return app.listen(app.get("port"), () => {
       console.log(
         "  App is running at http://localhost:%d in %s mode",

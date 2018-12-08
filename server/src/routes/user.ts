@@ -6,7 +6,6 @@ import UserRepository from "../repositories/userRepository";
 import MailService from "../services/mail";
 import { body } from "express-validator/check";
 
-
 export default function (authService: AuthService, userRepository: UserRepository, mailService: MailService, app: Express) {
 
     app.get("/", function (req: Request, res: Response) {
