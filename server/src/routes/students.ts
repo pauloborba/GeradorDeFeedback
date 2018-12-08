@@ -11,7 +11,7 @@ export default function (authService: AuthService, studentRepository: StudentRep
     
     app.get("/api/students", (req, res, next) => authService.checkTokenMiddleware(req, res, next), async (req: Request, res: Response) => {
         try {
-            let all = <IStudent[]>await studentRepository.findAll({});
+            let all = await studentRepository.findAll({});
 
             res.status(200).json({
                 status: "ok",
@@ -19,10 +19,7 @@ export default function (authService: AuthService, studentRepository: StudentRep
             });
 
         } catch (err) {
-            res.status(500).json({
-                status: "error",
-                message: err.message
-            })
+            handleError(res, err);
         }
     });
     
@@ -36,16 +33,7 @@ export default function (authService: AuthService, studentRepository: StudentRep
                 message: "Students were registered successfully"
             });
         } catch (err) {
-            let status = 500;
-
-            if(err instanceof StudentNotInTheHuxleyException || err instanceof StudentWithEmptyLoginException || err instanceof StudentWithEmptyNameException) {
-                status = 422;
-            }
-
-            res.status(status).json({
-                status: "error",
-                message: err.message
-            })
+            handleError(res, err);
         }
     });
     
@@ -58,10 +46,31 @@ export default function (authService: AuthService, studentRepository: StudentRep
                 student: info
             });
         } catch (err) {
-            res.status(404).json({
-                status: "error",
-                message: err.message
-            })
+            handleError(res, err);
         }
     })
+
+}
+
+function getStatus(err: Error): number{
+    const statuses: any = {
+        "422": [StudentWithEmptyLoginException, StudentWithEmptyNameException],
+        "404": [StudentNotInTheHuxleyException]
+    }
+
+    for(let key in statuses) {
+        if(statuses[key].find((exc: any) => err instanceof exc)) {
+            return parseInt(key);
+        }
+    }
+
+    return 500;
+}
+
+function handleError(res: Response, err: Error) {
+    let statusCode = getStatus(err);
+    return res.status(statusCode).json({
+        status: "error",
+        message: err.message
+    });
 }
