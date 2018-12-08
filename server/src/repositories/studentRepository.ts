@@ -32,4 +32,7 @@ export default class StudentRepository {
     addReport(stundent: Student, submission: Submission): Promise<any> {
         return Promise.resolve();
     }
+    deleteMany(criteria: any) {
+        return this.mongodb.collection("students").deleteMany(criteria);
+    }
 }
