@@ -36,4 +36,24 @@ describe("O servidor", () => {
     })
   })
 
+  it('deveria registrar e recuperar estudantes', async () => {
+    try {
+      const resPost = (await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam"}]}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data;
+      
+      await expect(resPost).toBe({
+        status: 'ok',
+        message: "Students successfully registered"
+      })
+      
+      const res = (await axios.get(`${base_url}/api/students`)).data;
+      expect(res).toBe([{theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam"}]);
+    } catch (err) {
+      expect(err).toBe(null);
+    }
+  })
+
 })
