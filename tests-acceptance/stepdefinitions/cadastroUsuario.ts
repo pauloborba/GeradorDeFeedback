@@ -50,20 +50,42 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
         await filteredUsers.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(0));
     })
 
+    Given(/that i can see a teaching assistant with name "([^\"]*)" and login "([^\"]*)"/, async (name, login) => {
+        let allUsers : ElementArrayFinder = element.all(by.css('.user'));
+        await allUsers;
+
+        var filteredUsers = allUsers.filter(
+            elem => pAND(sameLogin(elem, login), sameName(elem, name))
+        );
+        await filteredUsers;
+
+        const alreadyExists = filteredUsers.length == 1;
+        
+        if (!alreadyExists) {
+            fillForms (name, login);
+            await submitForm();
+        }
+    })
+
     When(/i fill the fields, name with "([^\"]*)" and login with "([^\"]*)"/, async (name, login) => {
-        await $('input[name="login"]').sendKeys(<string> login);
-        await $('input[name="name"]').sendKeys(<string> name);
+       await fillForms(name, login)
     })
 
     When(/i submit to register the teaching assistant/,
-        async () => await element(by.buttonText('Cadastrar')).click()
-        
+        async () => submitForm()
     )
 
     Then(/i can see the confirmation message "([^\"]*)"/, async (message) => {
         await browser.wait(() => $("#message").isPresent())
         await expect($("#message").getText()).to.eventually.equal(message)
     })
+
+
+    Then(/i can see a error message "([^\"]*)"/, async (message) => {
+        await browser.wait(() => $("#message").isPresent())
+        await expect($("#message").getText()).to.eventually.equal(message)
+    })
+
 
     Then(/i can see a student with name "([^\"]*)", login "([^\"]*)", and status "([^\"]*)"/, async (name, login, status) => {
         let allUsers : ElementArrayFinder = element.all(by.css('.user'));
@@ -84,3 +106,10 @@ const sameNameLoginAndStatus = async (elem, name, login, status) => {
     const sameStatus = await elem.$$('span[name="status"]').getText().then(text => text == status);
     return sameName && sameLogin && sameStatus;
 }
+
+const fillForms = async (name, login) => {
+    await $('input[name="login"]').sendKeys(<string> login);
+    await $('input[name="name"]').sendKeys(<string> name);
+}
+
+const submitForm = () => element(by.buttonText('Cadastrar')).click()
