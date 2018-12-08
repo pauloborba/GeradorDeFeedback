@@ -12,6 +12,7 @@ import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterStudentsComponent } from './pages/register-students/register-students.component';
+import { StudentsService } from './services/students.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { RegisterStudentsComponent } from './pages/register-students/register-st
       {path: 'students/new', component: RegisterStudentsComponent, canActivate: [AuthGuard] }
     ])
   ],
-  providers: [LoginService, UserService, AuthGuard],
+  providers: [LoginService, UserService, AuthGuard, StudentsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
