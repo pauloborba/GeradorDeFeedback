@@ -8,17 +8,16 @@ export class StudentsService {
   constructor(private http: HttpClient, private auth: LoginService) { }
 
   getAllStudents(token): Promise<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
-
-    return this.http.get('/api/students', httpOptions).toPromise();
+    return this.http.get('/api/students', this.getHeaderOptions(token)).toPromise();
   }
 
   registerStudents(token: string, students: any[]) {
+    return this.http.post('/api/students', {
+      students
+    }, this.getHeaderOptions(token)).toPromise();
+  }
+
+  getHeaderOptions(token: string) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -26,8 +25,6 @@ export class StudentsService {
       })
     };
 
-    return this.http.post('/api/students', {
-      students
-    }, httpOptions).toPromise();
+    return httpOptions;
   }
 }
