@@ -27,7 +27,7 @@ defineSupportCode(function ({ Given, When, Then }) {
     Given(/that i am at the "([^\"]*)" page/, async (page) => {
         let uri = '';
         if (page == 'Register Teaching Assistant') uri = 'register'   
-        
+        if (page == 'Register students') uri = 'students/new'
         await browser.get(`http://localhost:4200/${uri}`)
         await expect(browser.getTitle()).to.eventually.equal('GeradorDeFeedback');    
     })
