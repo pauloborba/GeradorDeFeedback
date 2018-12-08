@@ -49,6 +49,17 @@ describe("A classe studentRepository", () => {
         expect(get).not.toContain(jasmine.objectContaining(student));
       }
     })
+    
+    it("não deve registrar estudantes com nome em branco", async () => {
+      const student:IStudent = {theHuxleyName: "", login: "rma7", submissions: []}
+      try {
+        const insert = await studentRepository.insertMany([student]);
+        expect(insert.insertedCount).toBe(0);
+      } catch (err) {
+        const get = await studentRepository.findAll({});
+        expect(get).not.toContain(jasmine.objectContaining(student));
+      }
+    })
 
   })
   
