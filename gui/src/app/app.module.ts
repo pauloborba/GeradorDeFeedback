@@ -27,7 +27,8 @@ import { RegisterStudentsComponent } from './pages/register-students/register-st
     HttpClientModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent, pathMatch: 'full'},
-      {path: '', component: HomeComponent, canActivate: [AuthGuard] }
+      {path: '', component: HomeComponent, canActivate: [AuthGuard] },
+      {path: 'students/new', component: RegisterStudentsComponent, canActivate: [AuthGuard] }
     ])
   ],
   providers: [LoginService, UserService, AuthGuard],
