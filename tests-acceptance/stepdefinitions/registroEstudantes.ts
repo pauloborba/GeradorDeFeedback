@@ -13,6 +13,10 @@ defineSupportCode(function ({ Given, When, Then }) {
         const res = await axios.get(`http://localhost:3000/api/student?name=${name}`);
         expect(res.data.status).toEqual("ok");
     });
+    
+    Given(/"([^\"]*)" is not registered in The Huxley\'s group/, async (name) => {
+        const res = await axios.get(`http://localhost:3000/api/student?name=${name}`);
+        expect(res.data.status).toEqual("error");
     });
 
     When(/I try to upload a "([^\"]*)" file with columns "([^\"]*)" and "([^\"]*)" and an entry of "([^\"]*)" and "([^\"]*)" for those columns respectively/, async (type: string, column1: string, column2: string, name: string, login: string) => {
@@ -32,5 +36,10 @@ defineSupportCode(function ({ Given, When, Then }) {
         const allStudents = element.all(by.name("student"));
         let text = await allStudents.get(0).getText();
         await expect(Promise.resolve(text.indexOf(name))).to.not.eventually.equal(-1);
+    })
+    
+    Then(/I can see a error message/, async () => {
+        const alertDialog = browser.switchTo().activeElement();
+        expect(alertDialog.getText()).toEqual("Error: invalid student(s)");
     })
 })
