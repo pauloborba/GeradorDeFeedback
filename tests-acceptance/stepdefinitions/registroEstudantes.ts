@@ -1,5 +1,5 @@
 import { defineSupportCode } from 'cucumber';
-import { browser, $, element, ElementArrayFinder, by } from 'protractor';
+import { browser, $, element, ExpectedConditions, ElementArrayFinder, by } from 'protractor';
 
 import * as xlsx from "xlsx";
 import * as path from "path";
@@ -15,8 +15,12 @@ defineSupportCode(function ({ Given, When, Then }) {
     });
     
     Given(/"([^\"]*)" is not registered in The Huxley\'s group/, async (name) => {
-        const res = await axios.get(`http://localhost:3000/api/student?name=${name}`);
-        expect(res.data.status).toEqual("error");
+        try {
+            const res = await axios.get(`http://localhost:3000/api/student?name=${name}`);
+            expect(res.data.status).to.equal("error");
+        } catch (err) {
+            expect(err.response.status).to.equal(404);
+        }
     });
 
     When(/I try to upload a "([^\"]*)" file with columns "([^\"]*)" and "([^\"]*)" and an entry of "([^\"]*)" and "([^\"]*)" for those columns respectively/, async (type: string, column1: string, column2: string, name: string, login: string) => {
@@ -39,7 +43,8 @@ defineSupportCode(function ({ Given, When, Then }) {
     })
     
     Then(/I can see a error message/, async () => {
-        const alertDialog = browser.switchTo().activeElement();
-        expect(alertDialog.getText()).toEqual("Error: invalid student(s)");
+        await browser.wait(ExpectedConditions.alertIsPresent(), 5000);
+        const alertDialog = await browser.switchTo().alert();
+        await expect(alertDialog.getText()).to.eventually.include("Error");
     })
 })
