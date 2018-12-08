@@ -25,9 +25,17 @@ export default class StudentRepository {
         return Promise.resolve();
     }
 
-    insertMany(students: IStudent[]) : Promise<any> {
-        return this.mongodb.collection("students").insertMany(students);
+    async insertMany(students: IStudent[]) : Promise<any> {
+        try {
+            await Promise.all(students.map(async (student) => {
+                await this.theHuxleyService.getUserInfoByName(student.theHuxleyName);
+            }))
+            return this.mongodb.collection("students").insertMany(students);
+        } catch (err) {
+            throw err;
+        }
     }
+
     addSubmission(student: Student, submission: Submission): Promise<any> {
         return Promise.resolve();
     }
