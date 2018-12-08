@@ -36,7 +36,7 @@ export class RegisterStudentsComponent implements OnInit {
       const res = await this.studentsService.registerStudents(this.auth.token, this.studentsReadFromFile);
       this.students = this.studentsReadFromFile;
     } catch (err) {
-      console.log(err);
+      alert('Error: ' + err.error.message);
     }
   }
 
@@ -47,7 +47,6 @@ export class RegisterStudentsComponent implements OnInit {
       delete val['__rowNum__'];
       return val;
     });
-    console.log(this.studentsReadFromFile);
   }
 
   handleFile(event) {
