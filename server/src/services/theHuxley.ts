@@ -1,6 +1,7 @@
 import axios from "axios";
 import moment from "moment";
 import { thehuxley_username, thehuxley_password} from "../util/secrets";
+import StudentNotInTheHuxleyException from "../exceptions/StudentNotInTheHuxley";
 export default class TheHuxleyService {
     authorization: any;
     
@@ -110,7 +111,7 @@ export default class TheHuxleyService {
             const users = await axios.get('https://www.thehuxley.com/api/v1/groups/194/users?max=300');
             const user = users.data.find((user: any) => user.name === name);
             // console.log(users);
-            if (!user) throw new Error(`No student found with name ${name}`);
+            if (!user) throw new StudentNotInTheHuxleyException(name);
             return Promise.resolve(user);
         } catch (err) {
             // console.log(err.message)
