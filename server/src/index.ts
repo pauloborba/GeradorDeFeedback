@@ -38,7 +38,7 @@ export default MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(asy
     // Services
     const authService: AuthService = new AuthService(userRepository);
     const theHuxleyService: TheHuxleyService = new TheHuxleyService();
-  
+    await theHuxleyService.login();
     
     passportConfig.setupPassport(userRepository, authService);
     userRoutes(authService, userRepository, app);

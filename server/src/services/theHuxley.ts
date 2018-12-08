@@ -1,24 +1,23 @@
-const axios = require('axios');
-const moment = require('moment');
-
+import axios from "axios";
+import moment from "moment";
+import { thehuxley_username, thehuxley_password} from "../util/secrets";
 export default class TheHuxleyService {
     authorization: any;
     
     constructor() {
         this.authorization = null;
-
     }
 
-    async login(): Promise<any> {
+    login = async (): Promise<any> => {
         return new Promise((resolve, reject) => {
           if (!this.authorization || this.authorization.created_at + this.authorization.expires_in <= new Date().getTime()) {
             axios.post('https://www.thehuxley.com/api/login', {
-              username: process.env.thehuxley_username,
-              password: process.env.thehuxley_password,
+              username: thehuxley_username,
+              password: thehuxley_password,
             }).then((response: any) => {
               this.authorization = response.data;
               this.authorization.created_at = new Date().getTime();
-              axios.defaults.headers.common.this.authorization = `Bearer ${this.authorization.access_token}`;
+              axios.defaults.headers.common.authorization = `Bearer ${this.authorization.access_token}`;
               resolve();
             }).catch((err: any) => reject(err));
           } else {
@@ -105,14 +104,16 @@ export default class TheHuxleyService {
     //     }
     //   }
 
-    async getUserInfoByName(name: string) {
+    getUserInfoByName = async (name: string) => {
         try {
             if (!this.authorization) await this.login();
             const users = await axios.get('https://www.thehuxley.com/api/v1/groups/194/users?max=150');
             const user = users.data.find((user: any) => user.name === name);
+            // console.log(users);
             if (!user) throw new Error('No student found with this name.');
             return Promise.resolve(user);
         } catch (err) {
+            console.log(err.message)
             return Promise.reject(err);
         }
     }

@@ -13,6 +13,8 @@ const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 export const MONGODB_URI = process.env["MONGODB_URI"];
 export const MONGODB_NAME = process.env["MONGODB_NAME"];
 export const JWT_LOGIN_SECRET = process.env.JWT_LOGIN_SECRET;
+export const thehuxley_username = process.env.thehuxley_username;
+export const thehuxley_password = process.env.thehuxley_password;
 
 if (!MONGODB_URI) {
     console.error("No mongo connection string. Set MONGODB_URI environment variable.");
