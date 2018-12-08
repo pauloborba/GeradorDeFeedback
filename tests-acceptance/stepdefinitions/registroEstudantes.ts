@@ -11,7 +11,8 @@ let expect = chai.expect;
 defineSupportCode(function ({ Given, When, Then }) {
     Given(/"([^\"]*)" is registered in The Huxley\'s group/, async (name) => {
         const res = await axios.get(`http://localhost:3000/api/student?name=${name}`);
-        expect(res.data.error).to.be.undefined;
+        expect(res.data.status).toEqual("ok");
+    });
     });
 
     When(/I try to upload a "([^\"]*)" file with columns "([^\"]*)" and "([^\"]*)" and an entry of "([^\"]*)" and "([^\"]*)" for those columns respectively/, async (type: string, column1: string, column2: string, name: string, login: string) => {
