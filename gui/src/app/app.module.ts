@@ -10,13 +10,15 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginService } from './services/login.service';
 import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
-import { HomeComponent } from './pages/home/home.component'
+import { HomeComponent } from './pages/home/home.component';
+import { RegisterStudentsComponent } from './pages/register-students/register-students.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    RegisterStudentsComponent
   ],
   imports: [
     BrowserModule,
