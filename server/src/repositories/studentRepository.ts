@@ -34,19 +34,7 @@ export default class StudentRepository {
 
     async insertMany(students: IStudent[]) : Promise<any> {
         try {
-
-            students.forEach(student => {
-                if(!student.theHuxleyName){
-                    throw new StudentWithEmptyNameException();
-                }
-                if(!student.login) {
-                    throw new StudentWithEmptyLoginException(student.theHuxleyName);
-                } 
-            });
-
-            await Promise.all(students.map(async (student) => {
-                await this.theHuxleyService.getUserInfoByName(student.theHuxleyName);
-            }))
+            await this.checkValidStudents(students);
             return this.mongodb.collection("students").insertMany(students);
         } catch (err) {
             throw err;
@@ -62,5 +50,19 @@ export default class StudentRepository {
     }
     deleteMany(criteria: any) {
         return this.mongodb.collection("students").deleteMany(criteria);
+    }
+
+    async checkValidStudents(students: IStudent[]) {
+        students.forEach(student => {
+            if(!student.theHuxleyName){
+                throw new StudentWithEmptyNameException();
+            } else if(!student.login) {
+                throw new StudentWithEmptyLoginException(student.theHuxleyName);
+            } 
+        });
+
+        await Promise.all(students.map(async (student) => {
+            await this.theHuxleyService.getUserInfoByName(student.theHuxleyName);
+        }))
     }
 }
