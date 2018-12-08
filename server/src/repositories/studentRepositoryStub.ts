@@ -6,7 +6,7 @@ import List from '../models/List';
 export default class studentepository {
     students: Array<Student>;
 
-    constructor() {
+    constructor(db: any) {
         this.students = [
             new Student({
                 _id: '1',
@@ -48,7 +48,7 @@ export default class studentepository {
         return Promise.resolve(this.students.find(student => student.theHuxleyName == name));
     }
 
-    getLists(): Promise<Array<Student>> {
+    getStudents(): Promise<Array<Student>> {
         return Promise.resolve(this.students);
     }
 }

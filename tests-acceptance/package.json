@@ -3,7 +3,7 @@
   "description": "Testes de aceitação do gerador de feedback",
   "scripts": {
     "tsc": "tsc",
-    "test": "protractor typeScript/config/config.js",
+    "test": "tsc && protractor typeScript/config/config.js",
     "webdriver-update": "webdriver-manager update",
     "webdriver-start": "webdriver-manager start"
   },

@@ -1,8 +1,10 @@
+import { IList } from '../types/collections'
+
 export default class listRepository {
     _id: string;
     theHuxleyId: string;
     name: string;
-    problems: [{name:string, theHuxleyId:string}];
+    problems: {name:string, theHuxleyId:string} [];
     
     constructor({_id, theHuxleyId, name, problems} : IList) {
         this._id = _id;

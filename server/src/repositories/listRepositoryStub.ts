@@ -4,7 +4,7 @@ import List from '../models/List'
 export default class listRepository {
     lists: Array<List>;
 
-    constructor () {
+    constructor (db: any) {
         this.lists = [
             new List(
                 { 

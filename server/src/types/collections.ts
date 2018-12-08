@@ -2,6 +2,8 @@ export interface IUser {
     _id?: string;
     isAdmin?: boolean;
     username: string;
+    name: string;
+    status: string;
     password: string;
     salt?: string;
 }
