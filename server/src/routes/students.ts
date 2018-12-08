@@ -2,16 +2,19 @@ import { Request, Response, Express } from "express";
 import AuthService from "../services/auth";
 import StudentRepository from "../repositories/studentRepository";
 import TheHuxleyService from "../services/theHuxley";
+import { IStudent } from "collections";
 
 export default function (authService: AuthService, studentRepository: StudentRepository, theHuxleyService: TheHuxleyService, app: Express) {
     
     app.get("/api/students", (req, res, next) => authService.checkTokenMiddleware(req, res, next), async (req: Request, res: Response) => {
         try {
-            let all = await studentRepository.findAll({});
+            let all = <IStudent[]>await studentRepository.findAll({});
+
             res.status(200).json({
                 status: "ok",
                 students: all
             });
+            
         } catch (err) {
             res.status(500).json({
                 status: "error",
