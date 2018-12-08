@@ -44,7 +44,7 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
         await allUsers;
 
         var filteredUsers = allUsers.filter(
-            elem => pAND(sameLogin(elem, login), sameName(elem, name))
+            elem => pAND(sameLogin(elem, login), sameName(elem, name);
         );
         await filteredUsers;
         await filteredUsers.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(0));
@@ -96,7 +96,6 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
         await filteredUsers;
         await filteredUsers.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(1));
     })
-
 
 })
 
