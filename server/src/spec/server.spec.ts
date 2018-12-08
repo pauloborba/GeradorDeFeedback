@@ -40,19 +40,25 @@ describe("O servidor", () => {
 
   it('deveria registrar e recuperar estudantes', async () => {
     try {
-      const resPost = (await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam"}]}, {
+      const resPost = await axios.post(`${base_url}/api/students`, { students: [{theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam"}]}, {
         headers: {
           Authorization: `Bearer ${token}`
         }
-      })).data;
+      })
       
-      await expect(resPost).toEqual({
+      await expect(resPost.data).toEqual({
         status: 'ok',
         message: "Students were registered successfully"
       })
       
-      const res = (await axios.get(`${base_url}/api/students`)).data;
-      expect(res).toBe([{theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam"}]);
+      const res = await axios.get(`${base_url}/api/students`, { headers: {
+        Authorization: `Bearer ${token}`
+      }});
+      expect(res.data.students).toContain(jasmine.objectContaining({theHuxleyName: "Lucas Barros de Almeida Machado", login: "lbam"}));
+    } catch (err) {
+      expect(err).toBe(null);
+    }
+  })
     } catch (err) {
       // console.log(err.message);
       expect(err).toBe(null);
