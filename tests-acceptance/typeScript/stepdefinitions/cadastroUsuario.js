@@ -58,13 +58,14 @@ cucumber_1.defineSupportCode(function ({ Given, When, Then, setDefaultTimeout })
     Then(/i can see a student with name "([^\"]*)", login "([^\"]*)", and status "([^\"]*)"/, (name, login, status) => __awaiter(this, void 0, void 0, function* () {
         let allUsers = protractor_1.element.all(protractor_1.by.css('.user'));
         yield allUsers;
-        var filteredUsers = allUsers.filter((elem) => __awaiter(this, void 0, void 0, function* () {
-            const nameGUI = (yield elem.$$('span[name="name"]').getText());
-            const loginGUI = (yield elem.$$('span[name="login"]').getText());
-            const statusGUI = (yield elem.$$('span[name="status"]').getText());
-            return nameGUI == name && loginGUI == login && statusGUI == status;
-        }));
+        var filteredUsers = allUsers.filter((elem) => __awaiter(this, void 0, void 0, function* () { return sameNameLoginAndStatus(elem, name, login, status); }));
         yield filteredUsers;
         yield filteredUsers.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(1));
     }));
+});
+const sameNameLoginAndStatus = (elem, name, login, status) => __awaiter(this, void 0, void 0, function* () {
+    const sameName = yield elem.$$('span[name="name"]').getText().then(text => text == name);
+    const sameLogin = yield elem.$$('span[name="login"').getText().then(text => text == login);
+    const sameStatus = yield elem.$$('span[name="status"]').getText().then(text => text == status);
+    return sameName && sameLogin && sameStatus;
 });

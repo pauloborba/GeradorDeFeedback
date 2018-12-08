@@ -9,7 +9,6 @@ let pAND = ((p,q) => p.then(a => q.then(b => a && b)))
 
 let sameName = (elem, name) => elem.$$('span[name="name"]').getText().then(text => text == name)
 let sameLogin = (elem, login) => elem.$$('span[name="login"]').getText().then(text => text == login)
-
 defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
 
     setDefaultTimeout(60 * 1000);
@@ -70,12 +69,7 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
         let allUsers : ElementArrayFinder = element.all(by.css('.user'));
         await allUsers;
         var filteredUsers = allUsers.filter(
-            async elem => {
-                const nameGUI = (await elem.$$('span[name="name"]').getText())
-                const loginGUI = (await elem.$$('span[name="login"]').getText())
-                const statusGUI = (await elem.$$('span[name="status"]').getText())
-                return nameGUI == name && loginGUI == login && statusGUI == status
-            }
+            async elem => sameNameLoginAndStatus(elem, name, login, status)
         );
         await filteredUsers;
         await filteredUsers.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(1));
@@ -83,3 +77,10 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
 
 
 })
+
+const sameNameLoginAndStatus = async (elem, name, login, status) => {
+    const sameName = await elem.$$('span[name="name"]').getText().then(text => text == name);
+    const sameLogin = await elem.$$('span[name="login"').getText().then(text => text == login);
+    const sameStatus = await elem.$$('span[name="status"]').getText().then(text => text == status);
+    return sameName && sameLogin && sameStatus;
+}
