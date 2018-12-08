@@ -21,7 +21,7 @@ describe("A classe UserRepository", () => {
     it('deve inserir um usuário no banco ao chamar o método insertOne', async () => {
       const userRepository = new UserRepository(db)
 
-      await userRepository.insertOne({ username: 'rma7', password: '123456'}, true)
+      await userRepository.insertOne({ username: 'rma7', password: '123456', status: "Confirmado", name: "Rafael"}, true)
       const result = <User> await userRepository.findOne({ username: 'rma7'})
       expect(result.username).toEqual('rma7')
       await userRepository.deleteAccount(result._id)
@@ -29,9 +29,9 @@ describe("A classe UserRepository", () => {
   
     it('deve inserir um usuario no banco com uma senha e retornar dados para um email ao chamar o método inviteUser', async () => {
       const userRepository = new UserRepository(db)
-      const admin = new User({ username: 'admin', password: '123', isAdmin: true })
+      const admin = new User({ username: 'admin', password: '123', isAdmin: true, name: "Adminstrador", status: "Confirmado" })
       
-      const mailData = await userRepository.inviteUser({ username: 'rma7', password: '123456'}, admin)
+      const mailData = await userRepository.inviteUser({ username: 'rma7', password: '123456', name: "Rafael", status: 'Pendente'}, admin)
       expect(mailData.to).toBe(`rma7@cin.ufpe.br`)
 
       const result = <User> await userRepository.findOne({ username: 'rma7'})

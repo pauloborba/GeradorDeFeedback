@@ -1,0 +1,42 @@
+<div style="flex: 1; justify-content: center; align-items: center">
+    <div>
+        <div>
+            <div>
+                <input name='name' [(ngModel)]='name' placeholder="Registro">
+            </div>
+            <div>
+                <input name='login' [(ngModel)]='login' placeholder="Login">
+            </div>
+            <div>
+                <button name='cadastrar' (click)="sendRegisterUser()">
+                    Cadastrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="message" *ngIf='message' style='border: 1px solid black'>
+        {{message}}
+    </div>
+
+    <ul name="userList">
+        <li class='user' *ngFor='let user of users'>
+            <span name='name'>
+                {{user.name}}
+            </span>
+            <strong>
+                Login:
+            </strong>
+            <span name='login'>
+                {{user.username}}
+            </span>
+            <strong>
+                Status:
+            </strong>
+            <span name='status'>
+                {{user.status}}
+            </span>
+        </li>
+    </ul>
+
+</div>

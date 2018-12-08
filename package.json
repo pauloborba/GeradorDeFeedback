@@ -4,7 +4,7 @@
   "description": "projeto exemplo da disciplina de ESS da graduação em Ciência da Computação do CIn-UFPE",
   "main": "index.js",
   "scripts": {
-    "test": "cd server && jasmine --config=./spec/support/jasmine.json "
+    "test": "cd server && npm test"
   },
   "repository": {
     "type": "git",

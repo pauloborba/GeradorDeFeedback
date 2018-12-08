@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Servidor do Genip",
   "scripts": {
-    "test": "tsc && jasmine --config=./src/spec/support/jasmine.json",
+    "test": "export NODE_ENV='test' && tsc && jasmine --config=./src/spsec/support/jasmine.json",
+    "test-run": "export NODE_ENV='test' && tsc && nodemon dist/index.js",
     "start": "npm run serve",
     "build": "npm run build-ts",
     "serve": "node dist/index.js",
@@ -23,6 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "axios": "^0.18.0",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",

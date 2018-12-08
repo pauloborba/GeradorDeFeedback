@@ -7,7 +7,9 @@ export default class MailService {
         return Promise.resolve();
     }
 
-    sendInvite(to: User, content: any): Promise<any> {
-        return Promise.resolve();
+    sendInvite(data: any): Promise<any> {
+        return Promise.resolve(
+            data
+        );
     }
 }

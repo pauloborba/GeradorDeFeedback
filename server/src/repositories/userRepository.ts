@@ -16,13 +16,38 @@ export default class UserRepository {
     
     const updatedUser: IUser = {
       username: user.username,
-      password: user.password
+      password: user.password,
+      status: user.status,
+      name: user.name
     } 
 
     return this.mongodb.collection("users").updateOne({username: updatedUser.username}, { $set: updatedUser });
   }
 
-  async insertOne (user: IUser, hashPassword: true): Promise<any> {
+  async inviteUser(user: IUser, currentUser: User): Promise<any> {
+    if (!currentUser.isAdmin) {
+      return { type: 'unauthorized', message: 'Você não tem permissão para convidar usuários'}
+    }
+  
+    const createdUser = new User(user)
+    const password = createdUser.generateRandomPassword(8)
+    
+    const emailData = {
+      to: `${user.username}@cin.ufpe.br`,
+      password,
+    }
+
+    const dbUser: IUser = {
+      username: createdUser.username,
+      password: createdUser.password,
+      status: "Pendente",
+      name: createdUser.name
+    }
+    await this.insertOne(dbUser, true)
+    return emailData
+  }
+
+  async insertOne(user: IUser, hashPassword: true): Promise<any> {
     
     if (hashPassword) {
       const salt = await bcrypt.genSalt(10);
@@ -33,7 +58,10 @@ export default class UserRepository {
 
     const createdUser: IUser = {
       username: user.username,
-      password: user.password
+      password: user.password,
+      isAdmin: user.isAdmin,
+      status: user.status,
+      name: user.name
     }
 
     return this.mongodb.collection("users").insertOne(createdUser)
@@ -54,12 +82,15 @@ export default class UserRepository {
       return this.mongodb.collection("users").findOne(searchQuery, callback);
     } else {
       return this.mongodb.collection("users").findOne(searchQuery)
-        .then((user: IUser) => user ? new User(user) : null);
+        .then((user) => user ? new User(<IUser> user) : null);
     }
   }
 
+  async getAll() {
+    return this.mongodb.collection("users").find({}).toArray();
+  }
 
   async deleteAccount (userId: string) {
-    return this.mongodb.collection("users").remove({_id: new ObjectId(userId) });
+    return this.mongodb.collection("users").deleteOne({_id: new ObjectId(userId) });
   }
 }

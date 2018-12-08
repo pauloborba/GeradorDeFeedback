@@ -2,7 +2,7 @@ import User from '../../models/User'
 describe("A classe User", () => {
 
   it('deve criar um senha aleatória quando requisitado', () => {
-    const testUser = new User({ username: "rma7", isAdmin: false, password: null })
+    const testUser = new User({ username: "rma7", isAdmin: false, password: null, status: "Confirmado", name: "Rafael" })
     
     testUser.generateRandomPassword(5)
     expect(testUser.password.length).toBe(5)

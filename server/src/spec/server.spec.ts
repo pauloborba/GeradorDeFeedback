@@ -10,7 +10,6 @@ describe("O servidor", () => {
   beforeAll(async () => {
     let app = require('../index')
     server = await app
-    await axios.post(`${base_url}/register`, { username: 'admin', password: '123456'})
     token = (await axios.post(`${base_url}/api/login`, { username: 'admin', password: '123456'})).data.token
   });
 
@@ -24,16 +23,18 @@ describe("O servidor", () => {
   })
 
   it('cadastra usuários que logins ainda não cadastrados', async () => {
-    const res = (await axios.post('/users/invite', { 
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      data: { username: 'rma7' }
-    })).data
-    await expect(res).toBe({
-      status: 'ok',
-      message: "Invite succesfully sent to email rma7@cin.ufpe.br"
-    })
+    try {
+      const res = (await axios.post(`${base_url}/api/users/invite`,{ username: 'rma7' }, { 
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })).data
+      await expect(res.status).toBe("ok")
+      await expect(res.message).toBe("Invite succesfully sent to email rma7@cin.ufpe.br")
+    } catch (err) {
+      console.log(err)
+      expect(err).toBeNull()
+    }
   })
 
 })
