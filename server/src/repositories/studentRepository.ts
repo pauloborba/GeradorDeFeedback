@@ -13,8 +13,13 @@ export default class StudentRepository {
       this.theHuxleyService = theHuxleyService;
     }
 
-    findAll(criteria: any): Promise<Array<Student>> {
-        return this.mongodb.collection("students").find({}).toArray();
+    async findAll(criteria: any): Promise<Array<Student>> {
+        try {
+            const students = await this.mongodb.collection("students").find({}).toArray();
+            return Promise.resolve(students.map((student) => new Student(student)));
+        } catch (err) {
+            throw err;
+        }
     }
 
     findOne(studentId: string): Promise<Student> {
