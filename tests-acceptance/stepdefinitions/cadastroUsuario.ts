@@ -9,7 +9,6 @@ let pAND = ((p,q) => p.then(a => q.then(b => a && b)))
 
 let sameName = (elem, name) => elem.$$('span[name="name"]').getText().then(text => text == name)
 let sameLogin = (elem, login) => elem.$$('span[name="login"]').getText().then(text => text == login)
-let sameStatus = (elem, status) => elem.$$('span[name="status"]').getText().then(text => text == status)
 
 defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
 

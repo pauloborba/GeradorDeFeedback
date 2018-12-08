@@ -37,7 +37,7 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
     if (! (await userRepository.findOne({ username: 'admin' }))) {
       await userRepository.insertOne({ 
         username: 'admin', 
-        password: '123456', 
+        password: '123456',
         isAdmin: true, 
         status: 'Confirmado', 
         name: 'Adminstrador'}, true)

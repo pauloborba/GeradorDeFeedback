@@ -15,7 +15,6 @@ let expect = chai.expect;
 let pAND = ((p, q) => p.then(a => q.then(b => a && b)));
 let sameName = (elem, name) => elem.$$('span[name="name"]').getText().then(text => text == name);
 let sameLogin = (elem, login) => elem.$$('span[name="login"]').getText().then(text => text == login);
-let sameStatus = (elem, status) => elem.$$('span[name="status"]').getText().then(text => text == status);
 cucumber_1.defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
     setDefaultTimeout(60 * 1000);
     //that i am logged as a Admin user, “Pedro”, with password “123” 
