@@ -3,6 +3,7 @@ import { IStudent } from "collections";
 import Submission from "../models/Submission";
 import { Db } from "mongodb";
 import TheHuxleyService from "../services/theHuxley";
+import StudentWithEmptyLoginException from "../exceptions/StudentWithEmptyLogin";
 
 export default class StudentRepository {
     mongodb: Db;
@@ -32,6 +33,13 @@ export default class StudentRepository {
 
     async insertMany(students: IStudent[]) : Promise<any> {
         try {
+
+            students.forEach(student => {
+                if(!student.login) {
+                    throw new StudentWithEmptyLoginException(student.theHuxleyName);
+                } 
+            });
+
             await Promise.all(students.map(async (student) => {
                 await this.theHuxleyService.getUserInfoByName(student.theHuxleyName);
             }))
