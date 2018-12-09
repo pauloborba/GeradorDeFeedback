@@ -1,5 +1,6 @@
-const axios = require('axios');
-const moment = require('moment');
+import axios from "axios";
+import moment from "moment";
+import { thehuxley_username, thehuxley_password} from "../util/secrets";
 
 export default class TheHuxleyService {
     authorization: any;
@@ -9,16 +10,16 @@ export default class TheHuxleyService {
 
     }
 
-    async login(): Promise<any> {
+    login = async (): Promise<any> => {
         return new Promise((resolve, reject) => {
           if (!this.authorization || this.authorization.created_at + this.authorization.expires_in <= new Date().getTime()) {
             axios.post('https://www.thehuxley.com/api/login', {
-              username: process.env.thehuxley_username,
-              password: process.env.thehuxley_password,
+              username: thehuxley_username,
+              password: thehuxley_password,
             }).then((response: any) => {
               this.authorization = response.data;
               this.authorization.created_at = new Date().getTime();
-              axios.defaults.headers.common.this.authorization = `Bearer ${this.authorization.access_token}`;
+              axios.defaults.headers.common.authorization = `Bearer ${this.authorization.access_token}`;
               resolve();
             }).catch((err: any) => reject(err));
           } else {
@@ -65,9 +66,11 @@ export default class TheHuxleyService {
     async getFilteredLists(): Promise<any> {
       try {
         let lists = await this.getLists();
+        console.log(lists);
         lists = lists.data.filter(this.hasValidEndDate);
         return Promise.resolve(lists);
       } catch (err) {
+        console.log(err);
         return Promise.reject(err);
       }
     }
