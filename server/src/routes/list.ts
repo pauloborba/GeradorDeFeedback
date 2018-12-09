@@ -6,6 +6,19 @@ import List from "../models/List"
 
 
 export default function (authService: AuthService, theHuxleyService: TheHuxleyService, listRepository: listRepository, app: Express) {
+    app.get("/api/lists",
+    // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
+    async (req: Request, res: Response) => {
+        await theHuxleyService.getLists()
+            .then((data: any) => {
+                console.log(data);
+                return res.status(200).json({ success: data.data });
+            }).catch((err: any) => {
+                return res.status(500).json({ err: err });
+            });
+    }
+    )
+
     app.get("/api/list",
     // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
     async (req: Request, res: Response) => {
@@ -27,7 +40,7 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
                                     theHuxleyService.getListProblems(foundList[0].id)
                                         .then((data: any) => {
                                             console.log(data);
-                                            return res.status(200).json({ 'success': data });
+                                            return res.status(200).json({ success: data.data });
                                         }).catch((err: any) => {
                                             return res.status(500).json({ err: err });
                                         })
@@ -39,7 +52,7 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
                         return res.status(500).json({ err: err });
                     })
                 } else {
-                    return res.status(200).json({ 'success': foundList });
+                    return res.status(200).json({ success: foundList });
                 }
             }).catch((err: any) => {
                 console.log(err);
