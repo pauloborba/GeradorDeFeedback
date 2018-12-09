@@ -6,7 +6,7 @@ let chai = require('chai').use(require('chai-as-promised'));
 let expect = chai.expect;
 
 defineSupportCode(function ({ Given, When, Then }) {
-    Given(/i can see a student with login "([^\"]*)", with a report at the list  "([^\"]*)"/, async (login, list) => {
+    Given(/i can see a student with login "([^\"]*)", with a report at the list "([^\"]*)"/, async (login, list) => {
         // Não vai ser possível cadastrar um report no momento pois esse teste seria muito complexo, e
         // eu testar esse caso é a parte de outro integrante caso seja feito o teste de aceitação para cadastro de cenário pelo
         // integrante reposável, ele será adicionado aqui, por hora eu vou só checar se a condição já em cumprida
