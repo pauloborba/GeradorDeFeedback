@@ -43,7 +43,7 @@ defineSupportCode(function ({ Given, When, Then }) {
         await expect(Promise.resolve(text.indexOf(name))).to.not.eventually.equal(-1);
     })
     
-    Then(/I can see a error message/, async () => {
+    Then(/I can see an error message/, async () => {
         await browser.wait(ExpectedConditions.alertIsPresent(), 5000);
         const alertDialog = await browser.switchTo().alert();
         await expect(alertDialog.getText()).to.eventually.include("Error");
