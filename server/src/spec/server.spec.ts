@@ -65,4 +65,15 @@ describe("O servidor", () => {
     await expect(withLoginQuantity).toBe(1);
   })
 
+  it('envia reports de todos alunos que fizeram a lista quando requisitado', async () => {
+    const res = (await axios.post(`${base_url}/api/lists/send`, { id: '1'}, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    }))
+
+    expect(res.status).toBe(200);
+    expect(res.data.status).toBe('ok');
+    expect(res.data.message).toBe('Relatórios enviados com sucesso')
+  })
 })
