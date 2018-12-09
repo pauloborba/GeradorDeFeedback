@@ -82,14 +82,24 @@ export default function (authService: AuthService,
                     )
                     .filter(submission => submission)
                 
-                submissions.forEach(mailService.sendReport)
+                if (submissions.reduce((acumulator, item) => acumulator && item.report != null, true)) {
+                    
+                    submissions.forEach(mailService.sendReport)
+                    
+                    return res.status(200).json(
+                        {
+                            status: 'ok',
+                            message: "Relatórios enviados com sucesso"
+                        }
+                    )
                 
-                return res.status(200).json(
-                    {
-                        status: 'ok',
-                        message: "Relatórios enviados com sucesso"
-                    }
-                )
+                } else {
+
+                    return res.status(400).json({
+                        status: 'error',
+                        message: 'Você não pode enviar essa lista, pois ainda existem relatórios pendentes'
+                    })
+                }
             } else {
                 return res.status(400);
             }

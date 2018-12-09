@@ -35,7 +35,6 @@ export class ReportComponent implements OnInit {
     }
 
     sendList(list: any): Promise<any> {
-        console.log(list)
         return this.http
             .post('/api/lists/send', { id: list.listId }, {
                 headers: new HttpHeaders({
@@ -44,8 +43,12 @@ export class ReportComponent implements OnInit {
                 })
             })
             .toPromise()
-            .then(body => {console.log(body); return body})
             .then((body: any) => this.message[list.listId] = body.message)
+            .catch(err => {
+                if(err.status == 400) {
+                    this.message[list.listId] = err.error.message
+                }
+            })
     }
 
 
