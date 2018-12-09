@@ -25,7 +25,24 @@ defineSupportCode(function ({ Given, When, Then }) {
             }
         )
         await expect(filteredUsers.length).to.equal(1)
+    })
 
+    Given(/i can see a student with login "([^\"]*)" and no report at the list "([^\"]*)"/, async (login, list) => {
+        let allLists : ElementArrayFinder = element.all(by.css('.list'));
+        await allLists;
+        var filteredLists = allLists.filter(async element =>
+            await element.$('h1').getText().then(text => text == list)
+        );
+        await filteredLists;
+        await filteredLists.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(1));
+        let filteredUsers = await filteredLists.first().$$('.submission').filter(
+            async sub => {
+                let sameLogin = await sub.$$('td[name="login"').getText().then(text => text == login);
+                let isSent = await sub.$$('td[name="status"]').getText().then(text => text == 'Pendente');
+                return sameLogin && isSent;
+            }
+        )
+        await expect(filteredUsers.length).to.equal(1)
     })
 
     Given(/i can see only the students with login "([^\"]*)" and "([^\"]*)" in the grades at the list "([^\"]*)"/, 
@@ -39,12 +56,12 @@ defineSupportCode(function ({ Given, When, Then }) {
             await filteredLists.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(1));
             let filteredUsers = await filteredLists.first().$$('.submission').filter(
                 async sub => {
-                    let notEqualLogin1 = await sub.$('td[name="login"').getText().then(text => text != login1);
-                    let notEqualLogin2 = await sub.$('td[name="login"').getText().then(text => text != login2);
+                    let notEqualLogin1 = await sub.$('td[name="login"]').getText().then(text => text != login1);
+                    let notEqualLogin2 = await sub.$('td[name="login"]').getText().then(text => text != login2);
                     return notEqualLogin1 && notEqualLogin2
                 }
             )
-            await expect(filteredUsers.length).to.equal(1)
+            await expect(filteredUsers.length).to.equal(0)
         }
     )
 

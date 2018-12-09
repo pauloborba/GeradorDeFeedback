@@ -11,3 +11,10 @@ And i can see only the students with login "abc" and "def" in the grades at the 
 When i select send reports for the list "Prova 1"
 Then  i can see the confirmation message "Relatórios enviados com sucesso"
 
+
+Scenario: Send all list’s reports failure - not all reports registered
+Given that i am logged as a Admin user, "admin", with password "123456"
+And that i am at the "Reports Admin Page" page
+And i can see a student with login "def" and no report at the list "Prova 2"
+When i select send reports for the list "Prova 2"
+Then  i can see a error message "Você não pode enviar essa lista, pois ainda existem relatórios pendentes"
