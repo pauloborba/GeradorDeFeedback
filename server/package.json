@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Servidor do Genip",
   "scripts": {
-    "test": "jasmine --config=./spec/support/jasmine.json",
+    "test": "tsc && jasmine --config=./src/spec/support/jasmine.json",
     "start": "npm run serve",
     "build": "npm run build-ts",
     "serve": "node dist/index.js",
