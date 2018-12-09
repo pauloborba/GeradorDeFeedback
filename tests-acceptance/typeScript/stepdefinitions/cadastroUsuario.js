@@ -35,11 +35,13 @@ cucumber_1.defineSupportCode(function ({ Given, When, Then, setDefaultTimeout })
         let uri = '';
         if (page == 'Register Teaching Assistant')
             uri = 'register';
+        else if (page == 'Reports Admin Page')
+            uri = 'report';
         yield protractor_1.browser.get(`http://localhost:4200/${uri}`);
         yield expect(protractor_1.browser.getTitle()).to.eventually.equal('GeradorDeFeedback');
-        yield protractor_1.browser.wait(() => protractor_1.$("ul").isPresent());
     }));
     Given(/that i cant see a teaching assistant with name "([^\"]*)" and login "([^\"]*)"/, (name, login) => __awaiter(this, void 0, void 0, function* () {
+        yield protractor_1.browser.wait(() => protractor_1.$("ul").isPresent());
         let allUsers = protractor_1.element.all(protractor_1.by.css('.user'));
         yield allUsers;
         var filteredUsers = allUsers.filter(elem => pAND(sameLogin(elem, login), sameName(elem, name)));
@@ -47,6 +49,7 @@ cucumber_1.defineSupportCode(function ({ Given, When, Then, setDefaultTimeout })
         yield filteredUsers.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(0));
     }));
     Given(/that i can see a teaching assistant with name "([^\"]*)" and login "([^\"]*)"/, (name, login) => __awaiter(this, void 0, void 0, function* () {
+        yield protractor_1.browser.wait(() => protractor_1.$("ul").isPresent());
         let allUsers = protractor_1.element.all(protractor_1.by.css('.user'));
         yield allUsers;
         var filteredUsers = allUsers.filter(elem => pAND(sameLogin(elem, login), sameName(elem, name)));
@@ -84,7 +87,11 @@ const sameNameLoginAndStatus = (elem, name, login, status) => __awaiter(this, vo
     return sameName && sameLogin && sameStatus;
 });
 const fillForms = (name, login) => __awaiter(this, void 0, void 0, function* () {
-    yield protractor_1.$('input[name="login"]').sendKeys(login);
-    yield protractor_1.$('input[name="name"]').sendKeys(name);
+    const loginForm = yield protractor_1.$('input[name="login"]');
+    yield loginForm.clear();
+    yield loginForm.sendKeys(login);
+    const nameForm = yield protractor_1.$('input[name="name"]');
+    yield nameForm.clear();
+    yield nameForm.sendKeys(name);
 });
 const submitForm = () => protractor_1.element(protractor_1.by.buttonText('Cadastrar')).click();

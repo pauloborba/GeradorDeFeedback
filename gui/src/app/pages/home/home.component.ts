@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
     constructor(
-      private router: Router
+      private router: Router,
+      private auth: LoginService,
     ) {}
 
     ngOnInit() {
@@ -18,5 +19,9 @@ export class HomeComponent implements OnInit {
 
     goToRegister() {
       this.router.navigate(['register'])
+    }
+
+    goToReport() {
+      this.router.navigate(['report'])
     }
 }

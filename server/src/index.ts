@@ -3,12 +3,15 @@ import { MONGODB_URI, MONGODB_NAME } from "./util/secrets";
 import app from "./app";
 
 import userRoutes from "./routes/user";
+import reportRoutes from './routes/report'
+
 import * as passportConfig from "./config/passport";
 import UserRepository from "./repositories/userRepository";
 import AuthService from "./services/auth";
 import TheHuxleyService from "./services/theHuxley";
 import MailService from "./services/mail";
-import user from "./routes/user";
+import ListRepository from './repositories/listRepositoryStub';
+import StudentRepository from './repositories/studentRepositoryStub';
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
@@ -33,7 +36,9 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
 
     // Repositories
     const userRepository: UserRepository = new UserRepository(db);
-    
+    const listRepository: ListRepository = new ListRepository(db);
+    const studentRepository: StudentRepository = new StudentRepository(db);
+
     if (! (await userRepository.findOne({ username: 'admin' }))) {
       await userRepository.insertOne({ 
         username: 'admin', 
@@ -46,8 +51,15 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
     const authService: AuthService = new AuthService(userRepository);
     const theHuxleyService: TheHuxleyService = new TheHuxleyService();
     const mailService: MailService = new MailService();
-    
     passportConfig.setupPassport(userRepository, authService);
+
+    reportRoutes(authService, 
+      listRepository, 
+      studentRepository, 
+      userRepository, 
+      mailService, 
+      app
+    );
     userRoutes(authService, userRepository, mailService, app);
   
     return app.listen(app.get("port"), () => {

@@ -32,14 +32,14 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
     Given(/that i am at the "([^\"]*)" page/, async (page) => {
         let uri = '';
         if (page == 'Register Teaching Assistant') uri = 'register'   
-        
+        else if(page == 'Reports Admin Page') uri = 'report'
         await browser.get(`http://localhost:4200/${uri}`)
         await expect(browser.getTitle()).to.eventually.equal('GeradorDeFeedback');
-        await browser.wait(() => $("ul").isPresent())
-
     })
 
     Given(/that i cant see a teaching assistant with name "([^\"]*)" and login "([^\"]*)"/, async (name, login) => {
+        await browser.wait(() => $("ul").isPresent())
+
         let allUsers : ElementArrayFinder = element.all(by.css('.user'));
         await allUsers;
 
@@ -51,6 +51,8 @@ defineSupportCode(function ({ Given, When, Then, setDefaultTimeout }) {
     })
 
     Given(/that i can see a teaching assistant with name "([^\"]*)" and login "([^\"]*)"/, async (name, login) => {
+        await browser.wait(() => $("ul").isPresent())
+
         let allUsers : ElementArrayFinder = element.all(by.css('.user'));
         await allUsers;
 
@@ -107,8 +109,13 @@ const sameNameLoginAndStatus = async (elem, name, login, status) => {
 }
 
 const fillForms = async (name, login) => {
-    await $('input[name="login"]').sendKeys(<string> login);
-    await $('input[name="name"]').sendKeys(<string> name);
+    
+    const loginForm = await $('input[name="login"]');
+    await loginForm.clear();
+    await loginForm.sendKeys(<string> login);
+    const nameForm = await $('input[name="name"]')
+    await nameForm.clear()
+    await nameForm.sendKeys(<string> name);
 }
 
 const submitForm = () => element(by.buttonText('Cadastrar')).click()
