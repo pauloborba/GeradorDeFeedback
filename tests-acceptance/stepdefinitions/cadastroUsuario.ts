@@ -110,10 +110,10 @@ const sameNameLoginAndStatus = async (elem, name, login, status) => {
 
 const fillForms = async (name, login) => {
     
-    const loginForm = $('input[name="login"]');
+    const loginForm = await $('input[name="login"]');
     await loginForm.clear();
     await loginForm.sendKeys(<string> login);
-    const nameForm = $('input[name="name"]')
+    const nameForm = await $('input[name="name"]')
     await nameForm.clear()
     await nameForm.sendKeys(<string> name);
 }

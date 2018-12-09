@@ -23,6 +23,24 @@ export default class listRepository {
                         
                     ]
                 }
+            ),
+            new List(
+                { 
+                    _id: '2',
+                    name: 'Prova 2',
+                    theHuxleyId: '321',
+                    problems: [
+                        {
+                            name: 'Questão 1',
+                            theHuxleyId: '001'
+                        },
+                        {
+                            name: 'Questão 2',
+                            theHuxleyId: '002'
+                        },
+                        
+                    ]
+                }
             )
         ]
     }

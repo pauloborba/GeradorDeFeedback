@@ -6,7 +6,7 @@ let chai = require('chai').use(require('chai-as-promised'));
 let expect = chai.expect;
 
 defineSupportCode(function ({ Given, When, Then }) {
-    Given(/i can see a student with login "([^\"]*)", with a report at the list  "([^\"]*)"/, async (login, list) => {
+    Given(/i can see a student with login "([^\"]*)", with a report at the list "([^\"]*)"/, async (login, list) => {
         // Não vai ser possível cadastrar um report no momento pois esse teste seria muito complexo, e
         // eu testar esse caso é a parte de outro integrante caso seja feito o teste de aceitação para cadastro de cenário pelo
         // integrante reposável, ele será adicionado aqui, por hora eu vou só checar se a condição já em cumprida
@@ -19,12 +19,12 @@ defineSupportCode(function ({ Given, When, Then }) {
         await filteredLists.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(1));
         let filteredUsers = await filteredLists.first().$$('.submission').filter(
             async sub => {
-                let sameLogin = await sub.$('td[name="login"').getText().then(text => text == login);
-                let isSent = await sub.$('td[name="status"]').getText().then(text => text == 'Enviado');
+                let sameLogin = await sub.$$('td[name="login"').getText().then(text => text == login);
+                let isSent = await sub.$$('td[name="status"]').getText().then(text => text == 'Enviado');
                 return sameLogin && isSent;
             }
         )
-        await filteredUsers.length === 1;
+        await expect(filteredUsers.length).to.equal(1)
 
     })
 
@@ -44,7 +44,7 @@ defineSupportCode(function ({ Given, When, Then }) {
                     return notEqualLogin1 && notEqualLogin2
                 }
             )
-            await filteredUsers.length === 0;
+            await expect(filteredUsers.length).to.equal(1)
         }
     )
 

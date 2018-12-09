@@ -1,18 +1,36 @@
-<div *ngFor='let list of lists' class="list">
+<h1>
+    Relatório de Correções
+</h1>
 
-    <h3>
-        {{listName}}
-    </h3>
-    <table>
-        <tr class='submission'>
-            <td>
-                {{student.username}}
+<div class='container'>
+    <div *ngFor='let list of lists' class="list">
+        <h1>{{list.listName}}</h1>
+        <table style="width:100%">
+            <tr>
+              <th>Aluno</th>
+              <th>Status do Feedback</th> 
+            </tr>
+            <tr class='submission' *ngFor='let sub of list.submissions'>
+              <td name='login'>
+                <span name='login'>
+                    {{sub.studentLogin}}
+                </span>  
             </td>
-            </td>
-                {{student.sent}}
-            </td>
-        </tr>
-    </table>
+              <td name='status'>
+                  <span name='status'>
+                      {{sub.hasReport ? "Enviado" : "Pendente" }}
+                  </span>
+                </td>
+            </tr>
+        </table>
+    
+        <button (click)='sendList(list)'>
+            Enviar feedbacks
+        </button>
 
+        <div id='message' *ngIf='this.message[list.listId]'>
+            {{message[list.listId]}}
+        </div>
+    </div>
 
 </div>

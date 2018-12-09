@@ -3,7 +3,8 @@ import User from "../models/User";
 
 export default class MailService {
 
-    sendReport(to: Student, content: any): Promise<any> {
+    sendReport(content: any): Promise<any> {
+        console.log('send', content);
         return Promise.resolve();
     }
 
