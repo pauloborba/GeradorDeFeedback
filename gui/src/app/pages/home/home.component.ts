@@ -8,7 +8,15 @@ import { Router } from '@angular/router';
   //styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  constructor(private router: Router) {
+
+  }
+
     ngOnInit() {
         
+    }
+
+    lists = () => {
+      this.router.navigate(['lists'])
     }
 }
