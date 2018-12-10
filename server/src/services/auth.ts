@@ -58,7 +58,6 @@ export default class AuthService {
 
             const { _id, username } = user;
             const token = jwt.sign({ _id, username }, JWT_LOGIN_SECRET);
-
             res.status(200).json({ res: "You are logged in!", token });
         })(req, res, next);
     };
@@ -72,7 +71,6 @@ export default class AuthService {
 
         const errors = await req.getValidationResult();
         const errorsArray = errors.array().map((e) => e.msg);
-
         if (!errors.isEmpty()) {
             return res.status(422).json({ err: errorsArray });
         }
@@ -80,6 +78,8 @@ export default class AuthService {
         const user: IUser = {
             username: req.body.username,
             password: req.body.password,
+            status: "Confirmado",
+            name: req.body.name
         };
 
         try {

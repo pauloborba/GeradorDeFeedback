@@ -2,6 +2,8 @@ export interface IUser {
     _id?: string;
     isAdmin?: boolean;
     username: string;
+    name: string;
+    status: string;
     password: string;
     salt?: string;
 }
@@ -10,35 +12,28 @@ export interface IList {
     _id?: string;
     theHuxleyId: string;
     name: string;
-    problems: [
-        {
-            name: string,
-            theHuxleyId: string
-        }
-
-    ];
+    problems: {
+        name: string,
+        theHuxleyId: string
+    } [];
 }
 
 export interface ISubmission { // Submissão da Lista toda (não de código especifico)
     _id?: string;
     list: IList;
     report: IReport;
-    answers: [
-        {
-            theHuxleyId: string;
-            score: string;
-            code: string;
-        }
-    ];
+    answers: {
+        theHuxleyId: string;
+        score: string;
+        code: string;
+    }[];
 }
 
 export interface IReport {
-    correction: [
-        {
-            theHuxleyId: string;
-            commment: string
-        }
-    ]
+    correction: {
+        theHuxleyId: string;
+        comment: string
+    } [];
     finalComment: string;
 }
 
