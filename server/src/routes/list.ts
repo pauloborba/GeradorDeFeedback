@@ -9,17 +9,46 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
     app.get("/api/lists",
     // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
     async (req: Request, res: Response) => {
+        try{
+            let lists = await listRepository.findAll({});
+            res.status(200).json({success: lists});
+        } catch (err) {
+            return res.status(500).json({ err: err });
+        }
+        });
+
+    app.get("/api/list",
+    // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
+    async (req: Request, res: Response) => {
         await theHuxleyService.getLists()
             .then((data: any) => {
                 console.log(data);
-                return res.status(200).json({ success: data.data });
+                let foundList = data.data.find((list: any) => {
+                    return (list.id == req.query.id);
+                });
+                return res.status(200).json({ success: foundList });
             }).catch((err: any) => {
                 return res.status(500).json({ err: err });
             });
     }
     )
 
-    app.get("/api/list",
+    app.post("api/lists",
+    // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
+    async (req: Request, res: Response) => {
+        try {
+            await listRepository.deleteMany({});
+            await listRepository.insertMany(req.body.students);
+            res.status(200).json({ success: 'success' });
+        }
+        catch (err) {
+            res.status(500).json({err: err});
+        }
+    }
+    )
+
+
+    app.get("/api/list/problems",
     // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
     async (req: Request, res: Response) => {
         await theHuxleyService.getLists()
@@ -59,4 +88,11 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
                 return res.status(500).json({ err: err });
             });
     })
+
+    app.get("/api/list/students",
+    // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
+    async (req: Request, res: Response) => {
+
+    }
+    )
 }

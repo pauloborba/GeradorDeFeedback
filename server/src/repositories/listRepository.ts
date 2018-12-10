@@ -1,21 +1,29 @@
 import List from "../models/List";
 import { IList } from "collections";
+import { Db } from "mongodb";
+import TheHuxleyService from "../services/theHuxley";
 
 export default class listRepository {
-    findOne(): Promise<List> {
-        let list = {
-            _id: '3',
-            theHuxleyId: '1',
-            name: 'Prova 1',
-            problems: [
-                {
-                    name: 'Questao 3',
-                    theHuxleyId: '2'
-                }
-            ]
-        };
-        let listStub = new List(list);
-        return Promise.resolve(listStub);
+
+    mongodb: Db;
+    theHuxleyService: TheHuxleyService;
+
+    constructor (mongodb: Db, theHuxleyService: TheHuxleyService) {
+      this.mongodb = mongodb;
+      this.theHuxleyService = theHuxleyService;
     }
+
+    findAll(criteria: any): Promise<Array<List>> {
+        return this.mongodb.collection("lists").find({}).toArray();
+    }
+
+    insertMany(lists: IList[]) : Promise<any> {
+        return this.mongodb.collection("lists").insertMany(lists);
+    }
+
+    deleteMany(criteria: any) {
+        return this.mongodb.collection("students").deleteMany(criteria);
+    }
+
 
 }
