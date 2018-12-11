@@ -5,12 +5,14 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-student',
-  templateUrl: './student.component.html'
+  selector: 'app-problems',
+  templateUrl: './problems.component.html'
 })
-export class StudentComponent implements OnInit {
-  students: Array<any> = [];
+export class ProblemsComponent implements OnInit {
+  studentId: string;
   listId: string;
+  problems: Array<any> = [];
+
 
   constructor(
     private auth: LoginService,
@@ -20,24 +22,20 @@ export class StudentComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.getStudents();
-    this.listId = this.route.snapshot.paramMap.get('id');
-    console.log(this.listId);
+    this.listId = await this.route.snapshot.paramMap.get('listId');
+    this.studentId = await this.route.snapshot.paramMap.get('studentId');
+    await this.getProblems(this.listId);
   }
 
-  getStudents(): Promise<any> {
-    return this.http.get('/api/getstudents', {
+  getProblems(listId): Promise<any> {
+    return this.http.get(`/api/list/${listId}/problems`, {
       headers: new HttpHeaders({
           'Content-Type':  'application/json',
           'Authorization': `Bearer ${this.auth.token}`
       })
   })
   .toPromise()
-  .then((body: any) => this.students = body.success)
-  }
-
-  getProblems(studentId: string) {
-    this.router.navigate(['lists/', this.listId, 'student', studentId, 'problems'])
+  .then((body: any) => this.problems = body.success)
   }
 
 }

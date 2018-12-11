@@ -12,7 +12,8 @@ import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './pages/home/home.component';
 import { ListComponent } from './pages/list/list.component';
-import { StudentComponent } from './pages/student/student.component'
+import { StudentComponent } from './pages/student/student.component';
+import { ProblemsComponent } from './pages/problems/problems.component'
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { StudentComponent } from './pages/student/student.component'
     LoginComponent,
     HomeComponent,
     ListComponent,
-    StudentComponent
+    StudentComponent,
+    ProblemsComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import { StudentComponent } from './pages/student/student.component'
       {path: 'login', component: LoginComponent, pathMatch: 'full'},
       {path: '', component: HomeComponent, canActivate: [AuthGuard] },
       {path: 'lists', component: ListComponent, canActivate: [AuthGuard]},
-      {path: 'lists/:id/students', component: StudentComponent, canActivate: [AuthGuard]}
+      {path: 'lists/:id/students', component: StudentComponent, canActivate: [AuthGuard]},
+      {path: 'lists/:listId/student/:studentId/problems', component: ProblemsComponent, canActivate: [AuthGuard]}
     ])
   ],
   providers: [LoginService, UserService, AuthGuard],
