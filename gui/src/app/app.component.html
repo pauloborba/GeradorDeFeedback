@@ -1,1 +1,5 @@
+<div *ngIf='loginService.token'>
+    Logado como {{userName}}
+    <button (click)='logout()'>logout</button>
+</div>
 <router-outlet></router-outlet>

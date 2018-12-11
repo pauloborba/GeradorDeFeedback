@@ -58,7 +58,6 @@ export default class AuthService {
 
             const { _id, username } = user;
             const token = jwt.sign({ _id, username }, JWT_LOGIN_SECRET);
-
             res.status(200).json({ res: "You are logged in!", token });
         })(req, res, next);
     };

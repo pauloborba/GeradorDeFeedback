@@ -10,11 +10,19 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginService } from './services/login.service';
 import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './pages/home/home.component';
+import { ListComponent } from './pages/list/list.component';
+import { StudentComponent } from './pages/student/student.component';
+import { ProblemsComponent } from './pages/problems/problems.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    HomeComponent,
+    ListComponent,
+    StudentComponent,
+    ProblemsComponent
   ],
   imports: [
     BrowserModule,
@@ -23,6 +31,10 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent, pathMatch: 'full'},
+      {path: '', component: HomeComponent, canActivate: [AuthGuard] },
+      {path: 'lists', component: ListComponent, canActivate: [AuthGuard]},
+      {path: 'lists/:id/students', component: StudentComponent, canActivate: [AuthGuard]},
+      {path: 'lists/:listId/student/:studentId/problems', component: ProblemsComponent, canActivate: [AuthGuard]}
     ])
   ],
   providers: [LoginService, UserService, AuthGuard],

@@ -1,25 +1,25 @@
-const axios = require('axios');
-const moment = require('moment');
+import axios from "axios";
+import moment from "moment";
+import { thehuxley_username, thehuxley_password} from "../util/secrets";
 
 export default class TheHuxleyService {
     authorization: any;
     
     constructor() {
         this.authorization = null;
-        axios.defaults.baseURL = 'https://www.thehuxley.com/api';
 
     }
 
-    async login(): Promise<any> {
+    login = async (): Promise<any> => {
         return new Promise((resolve, reject) => {
           if (!this.authorization || this.authorization.created_at + this.authorization.expires_in <= new Date().getTime()) {
-            axios.post('/login', {
-              username: process.env.thehuxley_username,
-              password: process.env.thehuxley_password,
+            axios.post('https://www.thehuxley.com/api/login', {
+              username: thehuxley_username,
+              password: thehuxley_password,
             }).then((response: any) => {
               this.authorization = response.data;
               this.authorization.created_at = new Date().getTime();
-              axios.defaults.headers.common.this.authorization = `Bearer ${this.authorization.access_token}`;
+              axios.defaults.headers.common.authorization = `Bearer ${this.authorization.access_token}`;
               resolve();
             }).catch((err: any) => reject(err));
           } else {
@@ -31,7 +31,7 @@ export default class TheHuxleyService {
     async getSubmissionCode(submissionID: string): Promise<any> {
       try {
         if (!this.authorization) await this.login();
-        return axios.get(`v1/submissions/${submissionID}/sourcecode`);
+        return axios.get(`https://www.thehuxley.com/api/v1/submissions/${submissionID}/sourcecode`);
       } catch (err) {
         return Promise.reject(err);
       }
@@ -41,7 +41,7 @@ export default class TheHuxleyService {
     async getStudentSubmissions(problemID: string, userID: string): Promise<any> {
       try {
         if (!this.authorization) await this.login();
-        return axios.get(`v1/submissions?problem=${problemID}&user=${userID}`);
+        return axios.get(`https://www.thehuxley.com/api/v1/submissions?problem=${problemID}&user=${userID}`);
       } catch (err) {
         return Promise.reject(err);
       }
@@ -66,9 +66,11 @@ export default class TheHuxleyService {
     async getFilteredLists(): Promise<any> {
       try {
         let lists = await this.getLists();
+        console.log(lists);
         lists = lists.data.filter(this.hasValidEndDate);
         return Promise.resolve(lists);
       } catch (err) {
+        console.log(err);
         return Promise.reject(err);
       }
     }
@@ -76,7 +78,7 @@ export default class TheHuxleyService {
     async getListProblems(listID: string): Promise<any> {
       try {
         if (!this.authorization) await this.login();
-        return axios.get(`/v1/quizzes/${listID}/problems?max=100&offset=0`);
+        return axios.get(`https://www.thehuxley.com/api/v1/quizzes/${listID}/problems?max=100&offset=0`);
       } catch (err) {
         return Promise.reject(err);
       }
@@ -85,7 +87,7 @@ export default class TheHuxleyService {
     async getLists(): Promise<any> {
       try {
         if (!this.authorization) await this.login();
-        return axios.get('/v1/groups/194/quizzes?max=30&offset=0&order=desc&sort=startDate');
+        return axios.get('https://www.thehuxley.com/api/v1/groups/194/quizzes?max=30&offset=0&order=desc&sort=startDate');
         } catch (err) {
         return Promise.reject(err);
         }
@@ -109,7 +111,7 @@ export default class TheHuxleyService {
     async getUserInfoByName(name: string) {
         try {
             if (!this.authorization) await this.login();
-            const users = await axios.get('/v1/groups/194/users?max=150');
+            const users = await axios.get('https://www.thehuxley.com/api/v1/groups/194/users?max=150');
             const user = users.data.find((user: any) => user.name === name);
             if (!user) throw new Error('No student found with this name.');
             return Promise.resolve(user);
