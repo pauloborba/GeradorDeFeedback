@@ -3,6 +3,6 @@
 </h1>
 <ul>
 <li *ngFor="let lista of lists">
-  <button>{{lista.title}}</button>
+  <button (click)="getStudents(lista.id)">{{lista.title}}</button>
 </li>
 </ul>

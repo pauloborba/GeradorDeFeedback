@@ -87,11 +87,4 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
                 return res.status(500).json({ err: err });
             });
     })
-
-    app.get("/api/students",
-    // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
-    async (req: Request, res: Response) => {
-
-    }
-    )
 }
