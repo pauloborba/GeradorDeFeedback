@@ -33,7 +33,7 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
     }
     )
 
-    app.post("api/lists",
+    app.post("/api/lists",
     // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
     async (req: Request, res: Response) => {
         try {
@@ -87,4 +87,14 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
                 return res.status(500).json({ err: err });
             });
     })
+
+    app.get("/api/list/:id/problems",  async (req: Request, res: Response) => {
+        theHuxleyService.getListProblems(req.params.id)
+        .then((data: any) => {
+            console.log(data);
+            return res.status(200).json({ success: data.data });
+        }).catch((err: any) => {
+            return res.status(500).json({ err: err });
+        })
+    });
 }
