@@ -47,7 +47,6 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
     }
     )
 
-
     app.get("/api/list/problems",
     // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
     async (req: Request, res: Response) => {
@@ -89,7 +88,7 @@ export default function (authService: AuthService, theHuxleyService: TheHuxleySe
             });
     })
 
-    app.get("/api/list/students",
+    app.get("/api/students",
     // (req, res, next) => authService.checkTokenMiddleware(req, res, next),
     async (req: Request, res: Response) => {
 

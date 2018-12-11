@@ -22,7 +22,7 @@ export default class listRepository {
     }
 
     deleteMany(criteria: any) {
-        return this.mongodb.collection("students").deleteMany(criteria);
+        return this.mongodb.collection("lists").deleteMany(criteria);
     }
 
 

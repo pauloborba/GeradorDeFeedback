@@ -11,6 +11,5 @@ export default class List {
         this.theHuxleyId = theHuxleyId;
         this.name = name;
         this.problems = problems;
-
     }
 }

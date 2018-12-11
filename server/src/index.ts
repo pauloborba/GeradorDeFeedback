@@ -4,13 +4,14 @@ import app from "./app";
 
 import userRoutes from "./routes/user";
 import listRoutes from "./routes/list";
+import studentRoutes from "./routes/student";
 
 import * as passportConfig from "./config/passport";
 import UserRepository from "./repositories/userRepository";
 import AuthService from "./services/auth";
 import TheHuxleyService from "./services/theHuxley";
 import ListRepository from "./repositories/listRepository";
-import axios from "axios";
+import StudentRepository from "./repositories/studentRepository";
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
@@ -35,10 +36,12 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
 
     // Services
     const theHuxleyService: TheHuxleyService = new TheHuxleyService();
+    await theHuxleyService.login();
 
     // Repositories
     const userRepository: UserRepository = new UserRepository(db);
     const listRepository: ListRepository = new ListRepository(db, theHuxleyService);
+    const studentRepository: StudentRepository = new StudentRepository(db, theHuxleyService);
 
     const authService: AuthService = new AuthService(userRepository);
     
@@ -47,6 +50,7 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
     passportConfig.setupPassport(userRepository, authService);
     userRoutes(authService, userRepository, app);
     listRoutes(authService, theHuxleyService, listRepository, app);
+    studentRoutes(studentRepository, app);
     return app.listen(app.get("port"), async () => {
       console.log(
         "  App is running at http://localhost:%d in %s mode",
@@ -57,11 +61,18 @@ module.exports = MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(a
       try {
         let res = await theHuxleyService.getLists();
         await listRepository.deleteMany({});
-        console.log(res.data);
         await listRepository.insertMany(res.data);
       } catch (err) {
         console.log(err);
       }
+      let students: Array<any> = [];
+      let studentsName: Array<string> = ['Rafael Mota Alves', 'fel', 'IP-CC-UFPE-2'];
+      studentsName.forEach(async (element) => {
+        students.push(theHuxleyService.getUserInfoByName(element));
+      });
+      let studentsStub: Array<any> = await Promise.all(students);
+      await studentRepository.deleteMany({});
+      await studentRepository.insertMany(studentsStub);
     });
     
 }).catch(err => console.log(err));
