@@ -32,7 +32,6 @@ export class ListComponent implements OnInit {
 }
 
   getStudents(listId: string) {
-    console.log('dale')
     this.router.navigate(['lists/', listId, 'students'])
   }
 }

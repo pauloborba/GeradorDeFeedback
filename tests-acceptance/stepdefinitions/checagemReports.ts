@@ -21,8 +21,8 @@ defineSupportCode(function ({ Given, When, Then }) {
     })
 
     Given(/I am at the "([^\"]*)" page/, async (page) => {
-        let uri = '';
-        if (page == 'Lists') uri = '';
+        let uri = 'lists';
+        if (page == 'Listas') uri = '';
         await browser.get(`http://localhost:4200/${uri}`);
         await expect(browser.getTitle()).to.eventually.equal('GeradorDeFeedback');
     })
@@ -32,30 +32,20 @@ defineSupportCode(function ({ Given, When, Then }) {
         await lists;
         let foundList = lists.map(
             async elem => {
-                if(await (elem.$$('span[name="list"]').getText()) == list) {
+                
+                if(await (elem.$$('button[name="list"]').getText()) == list) {
                     return elem;
                 }
             }
         );
         await foundList;
-        console.log(foundList);
         await foundList.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(1));
     })
 
     Given(/There is a student "([^\"]*)" in the system/, async (student) => {
         const res = await axios.get(`http://localhost:3000/api/student?name=${student}`);
+        //essa rota será feita por lbam
         expect(res.data.error).to.be(null);
-    })
-
-    Given(/There is a list "([^\"]*)" in the system/, async (list) => {
-        const res = await axios.get(`http://localhost:3000/api/list?name=${list}`);
-        expect(res.data.error).to.be(null);
-    })
-
-    Given(/The student "([^\"]*)" has a question "([^\"]*)" in list "([^\"]*)"/, async (student, question, list) => {
-        const res = await axios.get(`http://localhost:3000/api/list?name=${list}/submissions?name=${student}/questions?=name=${question}`);
-        expect(res.data.error).to.be(null);
-        expect(res.data.pending);
     })
 
     When(/When I select the list "([^\"]*)"/, async (list) => {
